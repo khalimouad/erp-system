@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Override the default title -->
+    <template id="layout" inherit_id="web.layout" name="PRISM Layout">
+        <xpath expr="//title" position="replace">
+            <title t-esc="title or 'PRISM'"/>
+        </xpath>
+        <xpath expr="//link[@rel='shortcut icon']" position="replace">
+            <link rel="shortcut icon" href="/theme/static/src/img/favicon.ico" type="image/x-icon"/>
+        </xpath>
+    </template>
+    
+    <!-- Override the login page -->
+    <template id="login_layout" inherit_id="web.login_layout" name="PRISM Login Layout">
+        <xpath expr="//div[@class='container']" position="before">
+            <div class="prism-login-background"></div>
+        </xpath>
+        <xpath expr="//div[hasclass('card')]" position="attributes">
+            <attribute name="class">card prism-login-card</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('card-body')]" position="before">
+            <div class="text-center pt-3 pb-3">
+                <img src="/theme/static/src/img/prism_logo.png" alt="PRISM" class="prism-login-logo"/>
+            </div>
+        </xpath>
+    </template>
+    
+    <!-- Override the backend menu -->
+    <template id="menu" inherit_id="web.menu" name="PRISM Menu">
+        <xpath expr="//div[hasclass('o_main_navbar')]" position="attributes">
+            <attribute name="class">o_main_navbar prism-navbar</attribute>
+        </xpath>
+        <xpath expr="//a[hasclass('o_menu_brand')]" position="replace">
+            <a href="#" class="o_menu_brand prism-menu-brand">
+                <img src="/theme/static/src/img/prism_logo_small.png" alt="PRISM" class="prism-menu-logo"/>
+                <span>PRISM</span>
+            </a>
+        </xpath>
+    </template>
+    
+    <!-- Override the footer -->
+    <template id="footer" inherit_id="web.footer" name="PRISM Footer">
+        <xpath expr="//div[hasclass('o_footer')]" position="replace">
+            <div class="o_footer prism-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <span>PRISM ERP © 2025 Numexia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

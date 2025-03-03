@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Generate XML Wizard Form -->
+    <record id="view_simplis_generate_xml_wizard_form" model="ir.ui.view">
+        <field name="name">simplis.generate.xml.wizard.form</field>
+        <field name="model">simplis.generate.xml.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate SIMPL-IS Declaration">
+                <group>
+                    <field name="declaration_subtype"/>
+                    <field name="model_id" attrs="{'invisible': [('declaration_subtype', '!=', 'liasse')], 'required': [('declaration_subtype', '=', 'liasse')]}"/>
+                    <field name="fiscal_year"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+                <footer>
+                    <button name="action_generate" string="Generate" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Generate XML Wizard Action -->
+    <record id="action_simplis_generate_xml_wizard" model="ir.actions.act_window">
+        <field name="name">Generate SIMPL-IS Declaration</field>
+        <field name="res_model">simplis.generate.xml.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

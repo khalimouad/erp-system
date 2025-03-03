@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Moroccan Chart of Accounts Template -->
+        <record id="moroccan_chart_template" model="account.chart.template">
+            <field name="name">Moroccan Chart of Accounts</field>
+            <field name="code_digits">6</field>
+            <field name="visible">True</field>
+            <field name="currency_id" ref="base.MAD"/>
+            <field name="bank_account_code_prefix">5141</field>
+            <field name="cash_account_code_prefix">5161</field>
+            <field name="transfer_account_code_prefix">5800</field>
+            <field name="is_moroccan_chart">True</field>
+            <field name="moroccan_chart_type">general</field>
+            <field name="moroccan_chart_version">2020</field>
+            <field name="moroccan_chart_language">fr</field>
+            <field name="moroccan_chart_size">medium</field>
+            <field name="moroccan_chart_industry">general</field>
+            <field name="moroccan_chart_region">all</field>
+            <field name="moroccan_chart_company_type">all</field>
+            <field name="moroccan_chart_tax_regime">all</field>
+            <field name="moroccan_chart_vat_regime">all</field>
+            <field name="moroccan_chart_fiscal_year">all</field>
+            <field name="moroccan_chart_accounting_method">all</field>
+        </record>
+
+        <!-- Class 1: Financing Accounts -->
+        <record id="account_template_1111" model="account.account.template">
+            <field name="name">Capital social</field>
+            <field name="code">1111</field>
+            <field name="account_type">equity</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">equity</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_equity"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class1</field>
+        </record>
+        <record id="account_template_1140" model="account.account.template">
+            <field name="name">Primes d'émission, de fusion et d'apport</field>
+            <field name="code">1140</field>
+            <field name="account_type">equity</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">equity</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_equity"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class1</field>
+        </record>
+        <record id="account_template_1151" model="account.account.template">
+            <field name="name">Provisions réglementées</field>
+            <field name="code">1151</field>
+            <field name="account_type">equity</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">equity</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_equity"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class1</field>
+        </record>
+        <record id="account_template_1171" model="account.account.template">
+            <field name="name">Report à nouveau</field>
+            <field name="code">1171</field>
+            <field name="account_type">equity</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">equity</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_equity"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class1</field>
+        </record>
+        <record id="account_template_1181" model="account.account.template">
+            <field name="name">Résultat net de l'exercice</field>
+            <field name="code">1181</field>
+            <field name="account_type">equity</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">equity</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_equity"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class1</field>
+        </record>
+        <record id="account_template_1486" model="account.account.template">
+            <field name="name">Emprunts et dettes financières divers</field>
+            <field name="code">1486</field>
+            <field name="account_type">liability</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">liability</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_non_current_liabilities"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class1</field>
+        </record>
+
+        <!-- Class 2: Fixed Asset Accounts -->
+        <record id="account_template_2111" model="account.account.template">
+            <field name="name">Frais de constitution</field>
+            <field name="code">2111</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2321" model="account.account.template">
+            <field name="name">Terrains</field>
+            <field name="code">2321</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2331" model="account.account.template">
+            <field name="name">Constructions</field>
+            <field name="code">2331</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2340" model="account.account.template">
+            <field name="name">Matériel et outillage</field>
+            <field name="code">2340</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2351" model="account.account.template">
+            <field name="name">Matériel de transport</field>
+            <field name="code">2351</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2355" model="account.account.template">
+            <field name="name">Mobilier, matériel de bureau et aménagements divers</field>
+            <field name="code">2355</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2831" model="account.account.template">
+            <field name="name">Amortissements des frais de constitution</field>
+            <field name="code">2831</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2833" model="account.account.template">
+            <field name="name">Amortissements des constructions</field>
+            <field name="code">2833</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2834" model="account.account.template">
+            <field name="name">Amortissements du matériel et outillage</field>
+            <field name="code">2834</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+        <record id="account_template_2835" model="account.account.template">
+            <field name="name">Amortissements du matériel de transport</field>
+            <field name="code">2835</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_fixed_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class2</field>
+        </record>
+
+        <!-- Class 3: Inventory Accounts -->
+        <record id="account_template_3111" model="account.account.template">
+            <field name="name">Marchandises</field>
+            <field name="code">3111</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_current_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class3</field>
+            <field name="is_inventory_account">True</field>
+            <field name="inventory_valuation_method">average</field>
+        </record>
+        <record id="account_template_3121" model="account.account.template">
+            <field name="name">Matières premières</field>
+            <field name="code">3121</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_current_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class3</field>
+            <field name="is_inventory_account">True</field>
+            <field name="inventory_valuation_method">average</field>
+        </record>
+        <record id="account_template_3151" model="account.account.template">
+            <field name="name">Produits finis</field>
+            <field name="code">3151</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_current_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class3</field>
+            <field name="is_inventory_account">True</field>
+            <field name="inventory_valuation_method">average</field>
+        </record>
+
+        <!-- Class 4: Third Party Accounts -->
+        <record id="account_template_4411" model="account.account.template">
+            <field name="name">Fournisseurs</field>
+            <field name="code">4411</field>
+            <field name="account_type">liability</field>
+            <field name="internal_type">payable</field>
+            <field name="internal_group">liability</field>
+            <field name="reconcile">True</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_payable"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class4</field>
+        </record>
+        <record id="account_template_4415" model="account.account.template">
+            <field name="name">Fournisseurs - effets à payer</field>
+            <field name="code">4415</field>
+            <field name="account_type">liability</field>
+            <field name="internal_type">payable</field>
+            <field name="internal_group">liability</field>
+            <field name="reconcile">True</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_payable"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class4</field>
+        </record>
+        <record id="account_template_4421" model="account.account.template">
+            <field name="name">Clients</field>
+            <field name="code">4421</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">receivable</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">True</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_receivable"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class4</field>
+        </record>
+        <record id="account_template_4425" model="account.account.template">
+            <field name="name">Clients - effets à recevoir</field>
+            <field name="code">4425</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">receivable</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">True</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_receivable"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class4</field>
+        </record>
+        <record id="account_template_4455" model="account.account.template">
+            <field name="name">État - TVA facturée</field>
+            <field name="code">4455</field>
+            <field name="account_type">liability</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">liability</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_current_liabilities"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class4</field>
+            <field name="is_tax_account">True</field>
+            <field name="tax_type">tva</field>
+            <field name="is_vat_account">True</field>
+            <field name="vat_type">output</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('account_tag_tax_vat')])]"/>
+        </record>
+        <record id="account_template_4456" model="account.account.template">
+            <field name="name">État - TVA déductible</field>
+            <field name="code">4456</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_current_assets"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class4</field>
+            <field name="is_tax_account">True</field>
+            <field name="tax_type">tva</field>
+            <field name="is_vat_account">True</field>
+            <field name="vat_type">input</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('account_tag_tax_vat')])]"/>
+        </record>
+        <record id="account_template_4458" model="account.account.template">
+            <field name="name">État - Autres comptes créditeurs</field>
+            <field name="code">4458</field>
+            <field name="account_type">liability</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">liability</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_current_liabilities"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class4</field>
+        </record>
+
+        <!-- Class 5: Financial Accounts -->
+        <record id="account_template_5141" model="account.account.template">
+            <field name="name">Banques</field>
+            <field name="code">5141</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">liquidity</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_liquidity"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class5</field>
+        </record>
+        <record id="account_template_5161" model="account.account.template">
+            <field name="name">Caisse</field>
+            <field name="code">5161</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">liquidity</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_liquidity"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class5</field>
+        </record>
+        <record id="account_template_5800" model="account.account.template">
+            <field name="name">Virements internes</field>
+            <field name="code">5800</field>
+            <field name="account_type">asset</field>
+            <field name="internal_type">liquidity</field>
+            <field name="internal_group">asset</field>
+            <field name="reconcile">True</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_liquidity"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class5</field>
+        </record>
+
+        <!-- Class 6: Expense Accounts -->
+        <record id="account_template_6111" model="account.account.template">
+            <field name="name">Achats de marchandises</field>
+            <field name="code">6111</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6121" model="account.account.template">
+            <field name="name">Achats de matières premières</field>
+            <field name="code">6121</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6131" model="account.account.template">
+            <field name="name">Variations des stocks de marchandises</field>
+            <field name="code">6131</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6145" model="account.account.template">
+            <field name="name">Achats non stockés de matières et fournitures</field>
+            <field name="code">6145</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6161" model="account.account.template">
+            <field name="name">Primes d'assurance</field>
+            <field name="code">6161</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6171" model="account.account.template">
+            <field name="name">Rémunération du personnel</field>
+            <field name="code">6171</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6311" model="account.account.template">
+            <field name="name">Intérêts des emprunts et dettes</field>
+            <field name="code">6311</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6511" model="account.account.template">
+            <field name="name">Valeurs nettes d'amortissements des immobilisations cédées</field>
+            <field name="code">6511</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6611" model="account.account.template">
+            <field name="name">Dotations aux amortissements des immobilisations incorporelles</field>
+            <field name="code">6611</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_depreciation"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6612" model="account.account.template">
+            <field name="name">Dotations aux amortissements des immobilisations corporelles</field>
+            <field name="code">6612</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_depreciation"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+        </record>
+        <record id="account_template_6711" model="account.account.template">
+            <field name="name">Impôts sur les bénéfices</field>
+            <field name="code">6711</field>
+            <field name="account_type">expense</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">expense</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_expense"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class6</field>
+            <field name="is_tax_account">True</field>
+            <field name="tax_type">is</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('account_tag_tax_is')])]"/>
+        </record>
+
+        <!-- Class 7: Revenue Accounts -->
+        <record id="account_template_7111" model="account.account.template">
+            <field name="name">Ventes de marchandises</field>
+            <field name="code">7111</field>
+            <field name="account_type">income</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">income</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_income"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class7</field>
+        </record>
+        <record id="account_template_7121" model="account.account.template">
+            <field name="name">Ventes de biens et services produits</field>
+            <field name="code">7121</field>
+            <field name="account_type">income</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">income</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_income"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class7</field>
+        </record>
+        <record id="account_template_7131" model="account.account.template">
+            <field name="name">Variations des stocks de produits</field>
+            <field name="code">7131</field>
+            <field name="account_type">income</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">income</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_income"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class7</field>
+        </record>
+        <record id="account_template_7381" model="account.account.template">
+            <field name="name">Intérêts et produits assimilés</field>
+            <field name="code">7381</field>
+            <field name="account_type">income</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">income</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_other_income"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class7</field>
+        </record>
+        <record id="account_template_7511" model="account.account.template">
+            <field name="name">Produits des cessions d'immobilisations</field>
+            <field name="code">7511</field>
+            <field name="account_type">income</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">income</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_other_income"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class7</field>
+        </record>
+        <record id="account_template_7911" model="account.account.template">
+            <field name="name">Reprises sur amortissements des immobilisations incorporelles</field>
+            <field name="code">7911</field>
+            <field name="account_type">income</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">income</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_other_income"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class7</field>
+        </record>
+        <record id="account_template_7912" model="account.account.template">
+            <field name="name">Reprises sur amortissements des immobilisations corporelles</field>
+            <field name="code">7912</field>
+            <field name="account_type">income</field>
+            <field name="internal_type">other</field>
+            <field name="internal_group">income</field>
+            <field name="reconcile">False</field>
+            <field name="deprecated">False</field>
+            <field name="user_type_id" ref="account_type_other_income"/>
+            <field name="chart_template_id" ref="moroccan_chart_template"/>
+            <field name="is_moroccan_account">True</field>
+            <field name="moroccan_account_class">class7</field>
+        </record>
+
+        <!-- Set the default accounts for the chart template -->
+        <record id="moroccan_chart_template" model="account.chart.template">
+            <field name="property_account_receivable_id" ref="account_template_4421"/>
+            <field name="property_account_payable_id" ref="account_template_4411"/>
+            <field name="property_account_expense_categ_id" ref="account_template_6111"/>
+            <field name="property_account_income_categ_id" ref="account_template_7111"/>
+            <field name="property_stock_account_input_categ_id" ref="account_template_3111"/>
+            <field name="property_stock_account_output_categ_id" ref="account_template_3111"/>
+            <field name="property_stock_valuation_account_id" ref="account_template_3111"/>
+            <field name="bank_account_id" ref="account_template_5141"/>
+            <field name="income_currency_exchange_account_id" ref="account_template_7381"/>
+            <field name="expense_currency_exchange_account_id" ref="account_template_6311"/>
+        </record>
+    </data>
+</odoo>

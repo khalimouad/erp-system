@@ -1,0 +1,181 @@
+/* PRISM Common Theme Elements */
+
+/* Variables */
+$prism-primary: #3498db;
+$prism-secondary: #2c3e50;
+$prism-accent: #1abc9c;
+$prism-text: #333333;
+$prism-light: #ecf0f1;
+$prism-dark: #2c3e50;
+
+/* Typography */
+body {
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+    color: $prism-text;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: $prism-secondary;
+}
+
+a {
+    color: $prism-primary;
+    transition: color 0.2s ease;
+    
+    &:hover, &:focus {
+        color: darken($prism-primary, 15%);
+        text-decoration: none;
+    }
+}
+
+/* Utilities */
+.text-primary {
+    color: $prism-primary !important;
+}
+
+.text-secondary {
+    color: $prism-secondary !important;
+}
+
+.text-accent {
+    color: $prism-accent !important;
+}
+
+.bg-primary {
+    background-color: $prism-primary !important;
+}
+
+.bg-secondary {
+    background-color: $prism-secondary !important;
+}
+
+.bg-accent {
+    background-color: $prism-accent !important;
+}
+
+.bg-light {
+    background-color: $prism-light !important;
+}
+
+.border-primary {
+    border-color: $prism-primary !important;
+}
+
+.border-secondary {
+    border-color: $prism-secondary !important;
+}
+
+.border-accent {
+    border-color: $prism-accent !important;
+}
+
+/* Shadows */
+.shadow-sm {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Animations */
+.transition {
+    transition: all 0.3s ease;
+}
+
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Badges */
+.badge-primary {
+    background-color: $prism-primary;
+}
+
+.badge-secondary {
+    background-color: $prism-secondary;
+}
+
+.badge-accent {
+    background-color: $prism-accent;
+}
+
+/* Alerts */
+.alert-primary {
+    background-color: rgba($prism-primary, 0.1);
+    border-color: rgba($prism-primary, 0.2);
+    color: darken($prism-primary, 20%);
+}
+
+.alert-secondary {
+    background-color: rgba($prism-secondary, 0.1);
+    border-color: rgba($prism-secondary, 0.2);
+    color: darken($prism-secondary, 20%);
+}
+
+.alert-accent {
+    background-color: rgba($prism-accent, 0.1);
+    border-color: rgba($prism-accent, 0.2);
+    color: darken($prism-accent, 20%);
+}
+
+/* Progress Bars */
+.progress-bar {
+    background-color: $prism-primary;
+}
+
+/* Tooltips */
+.tooltip {
+    .tooltip-inner {
+        background-color: $prism-secondary;
+    }
+    
+    .arrow::before {
+        border-top-color: $prism-secondary;
+    }
+}
+
+/* Modals */
+.modal-content {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    
+    .modal-header {
+        background-color: $prism-light;
+        border-bottom: 1px solid darken($prism-light, 5%);
+        
+        .modal-title {
+            color: $prism-secondary;
+            font-weight: 600;
+        }
+    }
+}
+
+/* Tables */
+.table {
+    thead {
+        th {
+            background-color: $prism-light;
+            color: $prism-secondary;
+            border-bottom: 2px solid darken($prism-light, 5%);
+        }
+    }
+    
+    tbody {
+        tr:hover {
+            background-color: rgba($prism-primary, 0.05);
+        }
+    }
+}

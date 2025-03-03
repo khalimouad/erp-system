@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tax Exemption Form View -->
+    <record id="view_tax_exemption_form" model="ir.ui.view">
+        <field name="name">tax.exemption.form</field>
+        <field name="model">tax.exemption</field>
+        <field name="arch" type="xml">
+            <form string="Tax Exemption">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Export Exemption"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="tax_type_id"/>
+                            <field name="sequence"/>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="is_moroccan_exemption" invisible="1"/>
+                            <field name="moroccan_exemption_category" attrs="{'invisible': [('is_moroccan_exemption', '=', False)], 'required': [('is_moroccan_exemption', '=', True)]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Describe the exemption..."/>
+                        </page>
+                        <page string="Legal Reference">
+                            <field name="legal_reference" placeholder="Enter legal references..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tax Exemption Tree View -->
+    <record id="view_tax_exemption_tree" model="ir.ui.view">
+        <field name="name">tax.exemption.tree</field>
+        <field name="model">tax.exemption</field>
+        <field name="arch" type="xml">
+            <tree string="Tax Exemptions">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="tax_type_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Tax Exemption Search View -->
+    <record id="view_tax_exemption_search" model="ir.ui.view">
+        <field name="name">tax.exemption.search</field>
+        <field name="model">tax.exemption</field>
+        <field name="arch" type="xml">
+            <search string="Search Tax Exemptions">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="tax_type_id"/>
+                <field name="description"/>
+                <field name="legal_reference"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <filter string="Moroccan Exemptions" name="moroccan" domain="[('is_moroccan_exemption', '=', True)]"/>
+                <filter string="Valid Today" name="valid_today" domain="['|', ('date_from', '=', False), ('date_from', '&lt;=', context_today().strftime('%Y-%m-%d')), '|', ('date_to', '=', False), ('date_to', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Tax Type" name="group_by_tax_type" context="{'group_by': 'tax_type_id'}"/>
+                    <filter string="Moroccan Category" name="group_by_moroccan_category" context="{'group_by': 'moroccan_exemption_category'}"/>
+                    <filter string="Valid From" name="group_by_date_from" context="{'group_by': 'date_from'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Tax Exemption Action -->
+    <record id="action_tax_exemption" model="ir.actions.act_window">
+        <field name="name">Tax Exemptions</field>
+        <field name="res_model">tax.exemption</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_tax_exemption_search"/>
+        <field name="context">{'search_default_valid_today': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new tax exemption
+            </p>
+            <p>
+                Tax exemptions define cases where taxes are not applied or are reduced.
+            </p>
+        </field>
+    </record>
+</odoo>

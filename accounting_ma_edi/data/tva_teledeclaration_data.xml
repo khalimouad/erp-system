@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default withholding rates configuration -->
+        <record id="default_withholding_rate_75" model="ir.config_parameter">
+            <field name="key">accounting_ma_edi.default_withholding_rate</field>
+            <field name="value">75</field>
+        </record>
+        
+        <!-- DGI API URL configuration -->
+        <record id="dgi_api_url" model="ir.config_parameter">
+            <field name="key">accounting_ma_edi.dgi_api_url</field>
+            <field name="value">https://simpl-tva.tax.gov.ma/api/submit</field>
+        </record>
+    </data>
+</odoo>

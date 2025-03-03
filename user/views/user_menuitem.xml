@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- User Management Menu -->
+    <menuitem id="menu_user_management" 
+              name="User Management" 
+              parent="base.menu_administration" 
+              sequence="15"/>
+
+    <!-- User Roles Menu -->
+    <menuitem id="menu_user_roles" 
+              name="User Roles" 
+              parent="menu_user_management" 
+              action="action_user_role" 
+              sequence="10"/>
+
+    <!-- User Approvals Menu -->
+    <menuitem id="menu_user_approvals" 
+              name="User Approvals" 
+              parent="menu_user_management" 
+              action="action_user_approval" 
+              sequence="20"/>
+
+    <!-- My Approval Requests Menu -->
+    <menuitem id="menu_my_user_approvals" 
+              name="My Approval Requests" 
+              parent="menu_user_management" 
+              action="action_my_user_approval" 
+              sequence="30"/>
+
+    <!-- Pending Approvals Menu -->
+    <menuitem id="menu_pending_user_approvals" 
+              name="Pending Approvals" 
+              parent="menu_user_management" 
+              action="action_pending_user_approval" 
+              sequence="40" 
+              groups="base.group_system"/>
+</odoo>

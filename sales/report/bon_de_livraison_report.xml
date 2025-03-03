@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report definition -->
+        <record id="action_report_bon_de_livraison" model="ir.actions.report">
+            <field name="name">Bon de Livraison</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sales.report_bon_de_livraison</field>
+            <field name="report_file">sales.report_bon_de_livraison</field>
+            <field name="print_report_name">'Bon de Livraison - %s' % (object.bl_number or 'Draft')</field>
+            <field name="binding_model_id" ref="model_sale_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Report template -->
+        <template id="report_bon_de_livraison">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <!-- Header -->
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <h2>BON DE LIVRAISON</h2>
+                                </div>
+                            </div>
+                            
+                            <!-- BL Information -->
+                            <div class="row mt-4">
+                                <div class="col-6">
+                                    <strong>BL Number:</strong> <span t-field="doc.bl_number"/>
+                                    <br/>
+                                    <strong>BL Date:</strong> <span t-field="doc.bl_date"/>
+                                    <br/>
+                                    <strong>Order Reference:</strong> <span t-field="doc.name"/>
+                                    <br/>
+                                    <t t-if="doc.reference_number">
+                                        <strong>Customer Reference:</strong> <span t-field="doc.reference_number"/>
+                                        <br/>
+                                    </t>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Customer:</strong> <span t-field="doc.partner_id.name"/>
+                                    <br/>
+                                    <strong>Address:</strong>
+                                    <div t-field="doc.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: True}"/>
+                                    <t t-if="doc.partner_id.vat">
+                                        <strong>VAT:</strong> <span t-field="doc.partner_id.vat"/>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                            <!-- Delivery Information -->
+                            <div class="row mt-4">
+                                <div class="col-6">
+                                    <strong>Delivery Address:</strong>
+                                    <div t-field="doc.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: True}"/>
+                                </div>
+                                <div class="col-6">
+                                    <t t-if="doc.expected_delivery_date">
+                                        <strong>Expected Delivery Date:</strong> <span t-field="doc.expected_delivery_date"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="doc.delivery_term">
+                                        <strong>Delivery Terms:</strong> <span t-field="doc.delivery_term"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="doc.shipping_method">
+                                        <strong>Shipping Method:</strong> <span t-field="doc.shipping_method"/>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                            <!-- Products Table -->
+                            <table class="table table-sm mt-4">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th class="text-right">Quantity</th>
+                                        <th class="text-right">Unit Price</th>
+                                        <th class="text-right">Taxes</th>
+                                        <th class="text-right">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="doc.order_line" t-as="line">
+                                        <td>
+                                            <span t-field="line.product_id.name"/>
+                                            <t t-if="line.product_id.default_code">
+                                                [<span t-field="line.product_id.default_code"/>]
+                                            </t>
+                                            <t t-if="line.description_sale">
+                                                <br/>
+                                                <span t-field="line.description_sale"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.product_uom_qty"/>
+                                            <span t-field="line.product_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.price_unit"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="', '.join(map(lambda x: x.name, line.tax_id))"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <!-- Totals -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <t t-if="doc.is_vat_exempt">
+                                        <div class="alert alert-info">
+                                            <strong>VAT Exemption:</strong> <span t-field="doc.vat_exemption_reason"/>
+                                            <t t-if="doc.vat_exemption_certificate">
+                                                <br/>
+                                                <strong>Certificate:</strong> <span t-field="doc.vat_exemption_certificate"/>
+                                            </t>
+                                        </div>
+                                    </t>
+                                    <t t-if="doc.bl_notes">
+                                        <strong>Notes:</strong>
+                                        <p t-field="doc.bl_notes"/>
+                                    </t>
+                                </div>
+                                <div class="col-6">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Subtotal</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="doc.amount_untaxed"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Taxes</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="doc.amount_tax"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-top">
+                                            <td><strong>Total</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="doc.amount_total"/>
+                                            </td>
+                                        </tr>
+                                        <t t-if="doc.exchange_rate != 1.0">
+                                            <tr>
+                                                <td><strong>Total (MAD)</strong></td>
+                                                <td class="text-right">
+                                                    <span t-field="doc.amount_total_mad"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Signatures -->
+                            <div class="row mt-5">
+                                <div class="col-6 text-center">
+                                    <p>_______________________</p>
+                                    <p>Delivered by</p>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <p>_______________________</p>
+                                    <p>Received by</p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Warehouse Type Views -->
+    <record id="view_warehouse_type_tree" model="ir.ui.view">
+        <field name="name">stock.warehouse.type.tree</field>
+        <field name="model">stock.warehouse.type</field>
+        <field name="arch" type="xml">
+            <tree string="Warehouse Types">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <field name="requires_customs"/>
+                <field name="is_vat_exempt"/>
+                <field name="requires_special_license"/>
+                <field name="inspection_frequency"/>
+                <field name="warehouse_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_warehouse_type_form" model="ir.ui.view">
+        <field name="name">stock.warehouse.type.form</field>
+        <field name="model">stock.warehouse.type</field>
+        <field name="arch" type="xml">
+            <form string="Warehouse Type">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_warehouses" type="object" class="oe_stat_button" icon="fa-building-o">
+                            <field name="warehouse_count" widget="statinfo" string="Warehouses"/>
+                        </button>
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="requires_customs"/>
+                            <field name="is_vat_exempt"/>
+                            <field name="requires_special_license"/>
+                            <field name="inspection_frequency"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Authorities" name="authorities">
+                            <group>
+                                <group>
+                                    <field name="customs_authority_id" attrs="{'required': [('requires_customs', '=', True)]}"/>
+                                </group>
+                                <group>
+                                    <field name="license_authority_id" attrs="{'required': [('requires_special_license', '=', True)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Documentation" name="documentation">
+                            <group>
+                                <field name="required_documents" nolabel="1" placeholder="List required documents here..."/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <group>
+                                <field name="note" nolabel="1" placeholder="Add notes here..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_warehouse_type_search" model="ir.ui.view">
+        <field name="name">stock.warehouse.type.search</field>
+        <field name="model">stock.warehouse.type</field>
+        <field name="arch" type="xml">
+            <search string="Warehouse Types">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <filter string="Requires Customs" name="requires_customs" domain="[('requires_customs', '=', True)]"/>
+                <filter string="VAT Exempt" name="is_vat_exempt" domain="[('is_vat_exempt', '=', True)]"/>
+                <filter string="Requires License" name="requires_special_license" domain="[('requires_special_license', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="groupby_category" context="{'group_by': 'category'}"/>
+                    <filter string="Requires Customs" name="groupby_requires_customs" context="{'group_by': 'requires_customs'}"/>
+                    <filter string="VAT Exempt" name="groupby_is_vat_exempt" context="{'group_by': 'is_vat_exempt'}"/>
+                    <filter string="Inspection Frequency" name="groupby_inspection_frequency" context="{'group_by': 'inspection_frequency'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_warehouse_type" model="ir.actions.act_window">
+        <field name="name">Warehouse Types</field>
+        <field name="res_model">stock.warehouse.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_warehouse_type_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new warehouse type
+            </p>
+            <p>
+                Define different types of warehouses with specific properties.
+            </p>
+        </field>
+    </record>
+
+    <!-- Location Type Views -->
+    <record id="view_location_type_tree" model="ir.ui.view">
+        <field name="name">stock.location.type.tree</field>
+        <field name="model">stock.location.type</field>
+        <field name="arch" type="xml">
+            <tree string="Location Types">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="requires_approval"/>
+                <field name="restricted_access"/>
+                <field name="has_temperature_control"/>
+                <field name="customs_controlled"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_location_type_form" model="ir.ui.view">
+        <field name="name">stock.location.type.form</field>
+        <field name="model">stock.location.type</field>
+        <field name="arch" type="xml">
+            <form string="Location Type">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="requires_approval"/>
+                            <field name="restricted_access"/>
+                            <field name="has_temperature_control"/>
+                        </group>
+                    </group>
+                    <group string="Customs">
+                        <field name="customs_controlled"/>
+                        <field name="customs_document_required" attrs="{'invisible': [('customs_controlled', '=', False)]}"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_location_type_search" model="ir.ui.view">
+        <field name="name">stock.location.type.search</field>
+        <field name="model">stock.location.type</field>
+        <field name="arch" type="xml">
+            <search string="Location Types">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Requires Approval" name="requires_approval" domain="[('requires_approval', '=', True)]"/>
+                <filter string="Restricted Access" name="restricted_access" domain="[('restricted_access', '=', True)]"/>
+                <filter string="Temperature Control" name="has_temperature_control" domain="[('has_temperature_control', '=', True)]"/>
+                <filter string="Customs Controlled" name="customs_controlled" domain="[('customs_controlled', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Requires Approval" name="groupby_requires_approval" context="{'group_by': 'requires_approval'}"/>
+                    <filter string="Restricted Access" name="groupby_restricted_access" context="{'group_by': 'restricted_access'}"/>
+                    <filter string="Temperature Control" name="groupby_has_temperature_control" context="{'group_by': 'has_temperature_control'}"/>
+                    <filter string="Customs Controlled" name="groupby_customs_controlled" context="{'group_by': 'customs_controlled'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_location_type" model="ir.actions.act_window">
+        <field name="name">Location Types</field>
+        <field name="res_model">stock.location.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_location_type_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new location type
+            </p>
+            <p>
+                Define different types of locations with specific properties.
+            </p>
+        </field>
+    </record>
+
+    <!-- Inventory Type Views -->
+    <record id="view_inventory_type_tree" model="ir.ui.view">
+        <field name="name">stock.inventory.type.tree</field>
+        <field name="model">stock.inventory.type</field>
+        <field name="arch" type="xml">
+            <tree string="Inventory Types">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="requires_approval"/>
+                <field name="requires_supervisor"/>
+                <field name="requires_documentation"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_inventory_type_form" model="ir.ui.view">
+        <field name="name">stock.inventory.type.form</field>
+        <field name="model">stock.inventory.type</field>
+        <field name="arch" type="xml">
+            <form string="Inventory Type">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="requires_approval"/>
+                            <field name="requires_supervisor"/>
+                            <field name="requires_documentation"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_inventory_type_search" model="ir.ui.view">
+        <field name="name">stock.inventory.type.search</field>
+        <field name="model">stock.inventory.type</field>
+        <field name="arch" type="xml">
+            <search string="Inventory Types">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Requires Approval" name="requires_approval" domain="[('requires_approval', '=', True)]"/>
+                <filter string="Requires Supervisor" name="requires_supervisor" domain="[('requires_supervisor', '=', True)]"/>
+                <filter string="Requires Documentation" name="requires_documentation" domain="[('requires_documentation', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Requires Approval" name="groupby_requires_approval" context="{'group_by': 'requires_approval'}"/>
+                    <filter string="Requires Supervisor" name="groupby_requires_supervisor" context="{'group_by': 'requires_supervisor'}"/>
+                    <filter string="Requires Documentation" name="groupby_requires_documentation" context="{'group_by': 'requires_documentation'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_inventory_type" model="ir.actions.act_window">
+        <field name="name">Inventory Types</field>
+        <field name="res_model">stock.inventory.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_inventory_type_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new inventory type
+            </p>
+            <p>
+                Define different types of inventories with specific properties.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_warehouse_config_types" name="Configuration Types" parent="stock.menu_warehouse_config" sequence="10"/>
+    <menuitem id="menu_warehouse_type" name="Warehouse Types" action="action_warehouse_type" parent="menu_warehouse_config_types" sequence="10"/>
+    <menuitem id="menu_location_type" name="Location Types" action="action_location_type" parent="menu_warehouse_config_types" sequence="20"/>
+    <menuitem id="menu_inventory_type" name="Inventory Types" action="action_inventory_type" parent="menu_warehouse_config_types" sequence="30"/>
+</odoo>

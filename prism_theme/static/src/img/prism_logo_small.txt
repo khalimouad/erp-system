@@ -1,0 +1,2 @@
+This is a placeholder for the small PRISM logo used in the menu.
+In a real implementation, this would be a PNG or SVG file.

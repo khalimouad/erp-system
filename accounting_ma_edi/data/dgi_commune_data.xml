@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sample Commune Data for Morocco -->
+        <record id="dgi_commune_casablanca" model="dgi.commune">
+            <field name="name">Casablanca</field>
+            <field name="code">01</field>
+        </record>
+        
+        <record id="dgi_commune_rabat" model="dgi.commune">
+            <field name="name">Rabat</field>
+            <field name="code">02</field>
+        </record>
+        
+        <record id="dgi_commune_marrakech" model="dgi.commune">
+            <field name="name">Marrakech</field>
+            <field name="code">03</field>
+        </record>
+        
+        <record id="dgi_commune_fes" model="dgi.commune">
+            <field name="name">Fès</field>
+            <field name="code">04</field>
+        </record>
+        
+        <record id="dgi_commune_tanger" model="dgi.commune">
+            <field name="name">Tanger</field>
+            <field name="code">05</field>
+        </record>
+        
+        <record id="dgi_commune_agadir" model="dgi.commune">
+            <field name="name">Agadir</field>
+            <field name="code">06</field>
+        </record>
+        
+        <record id="dgi_commune_meknes" model="dgi.commune">
+            <field name="name">Meknès</field>
+            <field name="code">07</field>
+        </record>
+        
+        <record id="dgi_commune_oujda" model="dgi.commune">
+            <field name="name">Oujda</field>
+            <field name="code">08</field>
+        </record>
+        
+        <record id="dgi_commune_kenitra" model="dgi.commune">
+            <field name="name">Kénitra</field>
+            <field name="code">09</field>
+        </record>
+        
+        <record id="dgi_commune_tetouan" model="dgi.commune">
+            <field name="name">Tétouan</field>
+            <field name="code">10</field>
+        </record>
+        
+        <!-- Sample Tax Rate Data for DRVT -->
+        <record id="dgi_taux_drvt_10" model="dgi.taux">
+            <field name="name">Taux 10%</field>
+            <field name="code">10</field>
+            <field name="rate">10.0</field>
+            <field name="declaration_type">drvt</field>
+        </record>
+        
+        <record id="dgi_taux_drvt_20" model="dgi.taux">
+            <field name="name">Taux 20%</field>
+            <field name="code">20</field>
+            <field name="rate">20.0</field>
+            <field name="declaration_type">drvt</field>
+        </record>
+        
+        <record id="dgi_taux_drvt_30" model="dgi.taux">
+            <field name="name">Taux 30%</field>
+            <field name="code">30</field>
+            <field name="rate">30.0</field>
+            <field name="declaration_type">drvt</field>
+        </record>
+        
+        <!-- Sample Nature Data for PAPSRA -->
+        <record id="dgi_nature_papsra_div" model="dgi.nature">
+            <field name="name">Dividendes</field>
+            <field name="code">DIV</field>
+            <field name="declaration_type">papsra</field>
+        </record>
+        
+        <record id="dgi_nature_papsra_int" model="dgi.nature">
+            <field name="name">Intérêts</field>
+            <field name="code">INT</field>
+            <field name="declaration_type">papsra</field>
+        </record>
+        
+        <record id="dgi_nature_papsra_rev" model="dgi.nature">
+            <field name="name">Revenus</field>
+            <field name="code">REV</field>
+            <field name="declaration_type">papsra</field>
+        </record>
+        
+        <!-- Sample Tax Rate Data for PAPSRA -->
+        <record id="dgi_taux_papsra_15" model="dgi.taux">
+            <field name="name">Taux 15%</field>
+            <field name="code">15</field>
+            <field name="rate">15.0</field>
+            <field name="declaration_type">papsra</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tax Declaration Form View -->
+    <record id="view_tax_declaration_form" model="ir.ui.view">
+        <field name="name">tax.declaration.form</field>
+        <field name="model">tax.declaration</field>
+        <field name="arch" type="xml">
+            <form string="Tax Declaration">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" states="draft"/>
+                    <button name="action_submit" string="Submit" type="object" class="oe_highlight" states="confirmed"/>
+                    <button name="action_mark_as_paid" string="Mark as Paid" type="object" class="oe_highlight" states="submitted"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft,confirmed,submitted"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" states="confirmed,cancelled"/>
+                    <button name="generate_xml" string="Generate XML" type="object" states="draft,confirmed"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,submitted,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_lines" type="object" class="oe_stat_button" icon="fa-list"
+                                attrs="{'invisible': [('line_count', '=', 0)]}">
+                            <field name="line_count" widget="statinfo" string="Lines"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="tax_type_id"/>
+                            <field name="date"/>
+                            <field name="is_moroccan_declaration" invisible="1"/>
+                            <field name="moroccan_declaration_type" attrs="{'invisible': [('is_moroccan_declaration', '=', False)], 'required': [('is_moroccan_declaration', '=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="period_from"/>
+                            <field name="period_to"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount_taxable"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_total"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Declaration Lines">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="tax_type_id" invisible="1"/>
+                                    <field name="tax_rate_id"/>
+                                    <field name="tax_exemption_id"/>
+                                    <field name="amount_taxable"/>
+                                    <field name="amount_tax"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="XML Files" attrs="{'invisible': [('xml_file', '=', False), ('zip_file', '=', False)]}">
+                            <group>
+                                <field name="xml_file" filename="xml_filename" readonly="1"/>
+                                <field name="xml_filename" invisible="1"/>
+                                <field name="zip_file" filename="zip_filename" readonly="1"/>
+                                <field name="zip_filename" invisible="1"/>
+                            </group>
+                        </page>
+                        <page string="Submission Information" attrs="{'invisible': [('state', 'not in', ['submitted', 'paid'])]}">
+                            <group>
+                                <group>
+                                    <field name="submission_date"/>
+                                    <field name="submission_user_id"/>
+                                    <field name="submission_reference"/>
+                                </group>
+                                <group attrs="{'invisible': [('state', '!=', 'paid')]}">
+                                    <field name="payment_date"/>
+                                    <field name="payment_reference"/>
+                                    <field name="payment_method"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tax Declaration Tree View -->
+    <record id="view_tax_declaration_tree" model="ir.ui.view">
+        <field name="name">tax.declaration.tree</field>
+        <field name="model">tax.declaration</field>
+        <field name="arch" type="xml">
+            <tree string="Tax Declarations" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-warning="state == 'submitted'" decoration-primary="state == 'paid'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="tax_type_id"/>
+                <field name="date"/>
+                <field name="period_from"/>
+                <field name="period_to"/>
+                <field name="amount_taxable"/>
+                <field name="amount_tax"/>
+                <field name="amount_total"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Tax Declaration Search View -->
+    <record id="view_tax_declaration_search" model="ir.ui.view">
+        <field name="name">tax.declaration.search</field>
+        <field name="model">tax.declaration</field>
+        <field name="arch" type="xml">
+            <search string="Search Tax Declarations">
+                <field name="name"/>
+                <field name="tax_type_id"/>
+                <field name="period_from"/>
+                <field name="period_to"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Paid" name="paid" domain="[('state', '=', 'paid')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <filter string="Moroccan Declarations" name="moroccan" domain="[('is_moroccan_declaration', '=', True)]"/>
+                <filter string="This Year" name="this_year" domain="[('period_from', '&gt;=', datetime.date(context_today().year, 1, 1)), ('period_from', '&lt;=', datetime.date(context_today().year, 12, 31))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Tax Type" name="group_by_tax_type" context="{'group_by': 'tax_type_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Declaration Date" name="group_by_date" context="{'group_by': 'date'}"/>
+                    <filter string="Period From" name="group_by_period_from" context="{'group_by': 'period_from'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Tax Declaration Line Form View -->
+    <record id="view_tax_declaration_line_form" model="ir.ui.view">
+        <field name="name">tax.declaration.line.form</field>
+        <field name="model">tax.declaration.line</field>
+        <field name="arch" type="xml">
+            <form string="Tax Declaration Line">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="declaration_id"/>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="tax_type_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="tax_rate_id"/>
+                            <field name="tax_exemption_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount_taxable"/>
+                            <field name="amount_tax"/>
+                        </group>
+                    </group>
+                    <group string="Source Document" attrs="{'invisible': [('source_document_model', '=', False), ('source_document_id', '=', 0)]}">
+                        <field name="source_document_model"/>
+                        <field name="source_document_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tax Declaration Line Tree View -->
+    <record id="view_tax_declaration_line_tree" model="ir.ui.view">
+        <field name="name">tax.declaration.line.tree</field>
+        <field name="model">tax.declaration.line</field>
+        <field name="arch" type="xml">
+            <tree string="Tax Declaration Lines">
+                <field name="declaration_id"/>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="tax_rate_id"/>
+                <field name="tax_exemption_id"/>
+                <field name="amount_taxable"/>
+                <field name="amount_tax"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Tax Declaration Action -->
+    <record id="action_tax_declaration" model="ir.actions.act_window">
+        <field name="name">Tax Declarations</field>
+        <field name="res_model">tax.declaration</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_tax_declaration_search"/>
+        <field name="context">{'search_default_draft': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new tax declaration
+            </p>
+            <p>
+                Tax declarations are used to report taxes to tax authorities.
+            </p>
+        </field>
+    </record>
+
+    <!-- Tax Declaration Line Action -->
+    <record id="action_tax_declaration_line" model="ir.actions.act_window">
+        <field name="name">Declaration Lines</field>
+        <field name="res_model">tax.declaration.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_declaration_id': active_id}</field>
+        <field name="domain">[('declaration_id', '=', active_id)]</field>
+    </record>
+</odoo>

@@ -1,0 +1,2 @@
+This is a placeholder for the lot/serial tracking screenshot.
+In a real implementation, this would be a PNG or JPG file showing the lot/serial tracking interface with Moroccan-specific features like origin tracking, customs document tracking, and quality control workflow.

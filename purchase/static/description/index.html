@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISM Purchase</title>
+    <style>
+        body {
+            font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header img {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 24px;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+        .feature {
+            flex: 1 0 300px;
+            margin: 15px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .feature h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        .screenshots {
+            margin-top: 30px;
+        }
+        .screenshot {
+            margin-bottom: 30px;
+        }
+        .screenshot img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .screenshot p {
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="PRISM Logo">
+            <h1>PRISM Purchase</h1>
+            <p>Moroccan-compliant purchase management for PRISM ERP</p>
+        </div>
+        
+        <h2>Overview</h2>
+        <p>
+            The PRISM Purchase module extends the standard purchase functionality with Moroccan-specific fields and features.
+            It provides a comprehensive set of tools to manage purchase orders in compliance with Moroccan regulations.
+        </p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>Order Type Classification</h3>
+                <p>Categorize purchase orders based on their type:</p>
+                <ul>
+                    <li>Standard Orders</li>
+                    <li>Import Orders</li>
+                    <li>Free Zone Orders</li>
+                    <li>Government Orders</li>
+                </ul>
+                <p>Each type has specific behavior and tax implications.</p>
+            </div>
+            <div class="feature">
+                <h3>VAT Reverse Charge</h3>
+                <p>Handle VAT reverse charge according to Moroccan tax law:</p>
+                <ul>
+                    <li>Import Purchases</li>
+                    <li>Free Zone Purchases</li>
+                    <li>Non-resident Vendor Purchases</li>
+                </ul>
+                <p>With automatic tax calculation and reporting.</p>
+            </div>
+            <div class="feature">
+                <h3>Import Management</h3>
+                <p>Comprehensive import handling:</p>
+                <ul>
+                    <li>Customs Declaration Tracking</li>
+                    <li>Customs Value and Duty</li>
+                    <li>Import VAT</li>
+                    <li>Customs Codes</li>
+                    <li>Country of Origin</li>
+                </ul>
+            </div>
+            <div class="feature">
+                <h3>Delivery and Shipping</h3>
+                <p>Manage international trade terms:</p>
+                <ul>
+                    <li>Incoterms (EXW, FOB, CIF, etc.)</li>
+                    <li>Shipping Methods</li>
+                    <li>Origin Countries</li>
+                    <li>Expected Delivery Dates</li>
+                </ul>
+            </div>
+            <div class="feature">
+                <h3>Approval Workflow</h3>
+                <p>Implement approval processes for:</p>
+                <ul>
+                    <li>High-Value Orders (> 100,000 MAD)</li>
+                    <li>Import Orders</li>
+                    <li>Free Zone Orders</li>
+                    <li>Discount Validation</li>
+                </ul>
+                <p>With tracking of approvers and approval dates.</p>
+            </div>
+            <div class="feature">
+                <h3>Multi-Currency Support</h3>
+                <p>Handle multiple currencies with MAD conversion:</p>
+                <ul>
+                    <li>Exchange Rate Management</li>
+                    <li>Automatic MAD Conversion</li>
+                    <li>Dual Currency Display</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h2>Key Features</h2>
+        <ul>
+            <li>Comprehensive purchase order management with Moroccan-specific fields</li>
+            <li>VAT reverse charge handling according to Moroccan tax law</li>
+            <li>Import and customs management</li>
+            <li>Approval workflow for high-value and import orders</li>
+            <li>Multi-currency support with MAD conversion</li>
+            <li>Enhanced reporting capabilities</li>
+            <li>Integration with other PRISM modules</li>
+        </ul>
+        
+        <h2>Screenshots</h2>
+        <div class="screenshots">
+            <div class="screenshot">
+                <img src="screenshot_purchase_form.png" alt="Purchase Order Form">
+                <p>The extended purchase order form with Moroccan-specific fields</p>
+            </div>
+            <div class="screenshot">
+                <img src="screenshot_purchase_import.png" alt="Import Purchase">
+                <p>Import purchase with customs information</p>
+            </div>
+            <div class="screenshot">
+                <img src="screenshot_purchase_report.png" alt="Purchase Report">
+                <p>Enhanced purchase reporting with Moroccan-specific filters</p>
+            </div>
+        </div>
+        
+        <h2>Installation</h2>
+        <p>
+            Install this module to enable Moroccan-specific purchase management features in your PRISM ERP system.
+            This module depends on the base, purchase, and product modules.
+        </p>
+        
+        <h2>Support</h2>
+        <p>
+            For any questions or support requests, please contact the PRISM support team at support@numexia.com.
+        </p>
+    </div>
+</body>
+</html>

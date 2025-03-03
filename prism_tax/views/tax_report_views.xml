@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tax Report Form View -->
+    <record id="view_tax_report_form" model="ir.ui.view">
+        <field name="name">tax.report.form</field>
+        <field name="model">tax.report</field>
+        <field name="arch" type="xml">
+            <form string="Tax Report">
+                <header>
+                    <button name="action_generate_report" string="Generate Report" type="object" class="oe_highlight" states="draft"/>
+                    <button name="action_send_report" string="Send Report" type="object" class="oe_highlight" states="generated"/>
+                    <button name="action_archive_report" string="Archive" type="object" states="generated,sent"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" states="generated,sent,archived"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,sent,archived"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_declarations" type="object" class="oe_stat_button" icon="fa-list"
+                                attrs="{'invisible': [('declaration_count', '=', 0)]}">
+                            <field name="declaration_count" widget="statinfo" string="Declarations"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="tax_type_id"/>
+                            <field name="date"/>
+                            <field name="is_moroccan_report" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="period_from"/>
+                            <field name="period_to"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount_taxable"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_total"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Report Configuration" attrs="{'invisible': [('state', '!=', 'draft')]}">
+                            <group>
+                                <group>
+                                    <field name="report_type"/>
+                                    <field name="include_declarations"/>
+                                    <field name="include_exemptions"/>
+                                    <field name="include_rates"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Report Content" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="report_content"/>
+                        </page>
+                        <page string="Declarations" attrs="{'invisible': [('declaration_count', '=', 0)]}">
+                            <field name="declaration_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="period_from"/>
+                                    <field name="period_to"/>
+                                    <field name="amount_taxable"/>
+                                    <field name="amount_tax"/>
+                                    <field name="amount_total"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tax Report Tree View -->
+    <record id="view_tax_report_tree" model="ir.ui.view">
+        <field name="name">tax.report.tree</field>
+        <field name="model">tax.report</field>
+        <field name="arch" type="xml">
+            <tree string="Tax Reports" decoration-info="state == 'draft'" decoration-success="state == 'generated'" decoration-warning="state == 'sent'" decoration-muted="state == 'archived'">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="tax_type_id"/>
+                <field name="date"/>
+                <field name="period_from"/>
+                <field name="period_to"/>
+                <field name="report_type"/>
+                <field name="amount_taxable"/>
+                <field name="amount_tax"/>
+                <field name="amount_total"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Tax Report Search View -->
+    <record id="view_tax_report_search" model="ir.ui.view">
+        <field name="name">tax.report.search</field>
+        <field name="model">tax.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Tax Reports">
+                <field name="name"/>
+                <field name="tax_type_id"/>
+                <field name="period_from"/>
+                <field name="period_to"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Generated" name="generated" domain="[('state', '=', 'generated')]"/>
+                <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
+                <filter string="Archived" name="archived" domain="[('state', '=', 'archived')]"/>
+                <filter string="Moroccan Reports" name="moroccan" domain="[('is_moroccan_report', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Tax Type" name="group_by_tax_type" context="{'group_by': 'tax_type_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Report Date" name="group_by_date" context="{'group_by': 'date'}"/>
+                    <filter string="Period From" name="group_by_period_from" context="{'group_by': 'period_from'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Tax Report Action -->
+    <record id="action_tax_report" model="ir.actions.act_window">
+        <field name="name">Tax Reports</field>
+        <field name="res_model">tax.report</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_tax_report_search"/>
+        <field name="context">{'search_default_draft': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new tax report
+            </p>
+            <p>
+                Tax reports provide analysis and summaries of tax declarations.
+            </p>
+        </field>
+    </record>
+</odoo>

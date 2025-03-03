@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Tax Menu -->
+    <menuitem id="menu_tax_root" name="Taxes" sequence="50"/>
+
+    <!-- Tax Configuration Menu -->
+    <menuitem id="menu_tax_configuration" name="Configuration" parent="menu_tax_root" sequence="100"/>
+    <menuitem id="menu_tax_type" name="Tax Types" parent="menu_tax_configuration" action="action_tax_type" sequence="10"/>
+    <menuitem id="menu_tax_rate" name="Tax Rates" parent="menu_tax_configuration" action="action_tax_rate" sequence="20"/>
+    <menuitem id="menu_tax_exemption" name="Tax Exemptions" parent="menu_tax_configuration" action="action_tax_exemption" sequence="30"/>
+
+    <!-- Tax Operations Menu -->
+    <menuitem id="menu_tax_operations" name="Operations" parent="menu_tax_root" sequence="10"/>
+    <menuitem id="menu_tax_declaration" name="Tax Declarations" parent="menu_tax_operations" action="action_tax_declaration" sequence="10"/>
+
+    <!-- Tax Reporting Menu -->
+    <menuitem id="menu_tax_reporting" name="Reporting" parent="menu_tax_root" sequence="20"/>
+    <menuitem id="menu_tax_report" name="Tax Reports" parent="menu_tax_reporting" action="action_tax_report" sequence="10"/>
+
+    <!-- Moroccan Tax Menu -->
+    <menuitem id="menu_tax_moroccan" name="Moroccan Taxes" parent="menu_tax_root" sequence="30"/>
+    <menuitem id="menu_tax_moroccan_tva" name="TVA" parent="menu_tax_moroccan" sequence="10" action="action_tax_declaration"/>
+    <menuitem id="menu_tax_moroccan_is" name="IS" parent="menu_tax_moroccan" sequence="20" action="action_tax_declaration"/>
+    <menuitem id="menu_tax_moroccan_ir" name="IR" parent="menu_tax_moroccan" sequence="30" action="action_tax_declaration"/>
+</odoo>

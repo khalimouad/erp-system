@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Payroll Configuration Form View -->
+    <record id="view_hr_payroll_config_form" model="ir.ui.view">
+        <field name="name">hr.payroll.config.form</field>
+        <field name="model">hr.payroll.config</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Configuration">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="SMIG/SMAG">
+                            <group>
+                                <group string="SMIG">
+                                    <field name="smig_horaire"/>
+                                    <field name="smig_mensuel"/>
+                                </group>
+                                <group string="SMAG">
+                                    <field name="smag_horaire"/>
+                                    <field name="smag_mensuel"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="CNSS/AMO">
+                            <group>
+                                <group string="CNSS">
+                                    <field name="cnss_employee_rate"/>
+                                    <field name="cnss_employer_rate"/>
+                                    <field name="cnss_af_employer_rate"/>
+                                    <field name="cnss_fp_employer_rate"/>
+                                    <field name="cnss_ceiling"/>
+                                </group>
+                                <group string="AMO">
+                                    <field name="amo_employee_rate"/>
+                                    <field name="amo_employer_rate"/>
+                                    <field name="amo_contribution_employer_rate"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Seniority">
+                            <group>
+                                <field name="seniority_0_2_rate"/>
+                                <field name="seniority_2_5_rate"/>
+                                <field name="seniority_5_12_rate"/>
+                                <field name="seniority_12_20_rate"/>
+                                <field name="seniority_20_25_rate"/>
+                                <field name="seniority_25_plus_rate"/>
+                            </group>
+                        </page>
+                        <page string="Professional Expenses">
+                            <group>
+                                <group string="Annual SBI ≤ 78,000">
+                                    <field name="fp_rate_below_78000"/>
+                                    <field name="fp_max_below_78000"/>
+                                </group>
+                                <group string="Annual SBI > 78,000">
+                                    <field name="fp_rate_above_78000"/>
+                                    <field name="fp_max_above_78000"/>
+                                </group>
+                                <field name="fp_monthly_ceiling"/>
+                            </group>
+                        </page>
+                        <page string="IR">
+                            <group string="Monthly Tax Brackets">
+                                <group string="Thresholds">
+                                    <field name="ir_monthly_threshold_1"/>
+                                    <field name="ir_monthly_threshold_2"/>
+                                    <field name="ir_monthly_threshold_3"/>
+                                    <field name="ir_monthly_threshold_4"/>
+                                    <field name="ir_monthly_threshold_5"/>
+                                </group>
+                                <group string="Rates">
+                                    <field name="ir_monthly_rate_1"/>
+                                    <field name="ir_monthly_rate_2"/>
+                                    <field name="ir_monthly_rate_3"/>
+                                    <field name="ir_monthly_rate_4"/>
+                                    <field name="ir_monthly_rate_5"/>
+                                    <field name="ir_monthly_rate_6"/>
+                                </group>
+                                <group string="Deductions">
+                                    <field name="ir_monthly_deduction_1"/>
+                                    <field name="ir_monthly_deduction_2"/>
+                                    <field name="ir_monthly_deduction_3"/>
+                                    <field name="ir_monthly_deduction_4"/>
+                                    <field name="ir_monthly_deduction_5"/>
+                                    <field name="ir_monthly_deduction_6"/>
+                                </group>
+                            </group>
+                            <group string="Family Charges">
+                                <field name="family_allowance_deduction"/>
+                            </group>
+                        </page>
+                        <page string="Overtime">
+                            <group>
+                                <group string="Normal Days">
+                                    <field name="overtime_rate_day_normal"/>
+                                    <field name="overtime_rate_night_normal"/>
+                                </group>
+                                <group string="Holidays">
+                                    <field name="overtime_rate_day_holiday"/>
+                                    <field name="overtime_rate_night_holiday"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Payroll Configuration Tree View -->
+    <record id="view_hr_payroll_config_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.config.tree</field>
+        <field name="model">hr.payroll.config</field>
+        <field name="arch" type="xml">
+            <tree string="Payroll Configurations">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Payroll Configuration Search View -->
+    <record id="view_hr_payroll_config_search" model="ir.ui.view">
+        <field name="name">hr.payroll.config.search</field>
+        <field name="model">hr.payroll.config</field>
+        <field name="arch" type="xml">
+            <search string="Search Payroll Configurations">
+                <field name="name"/>
+                <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_date_from" string="Start Date" context="{'group_by': 'date_from'}"/>
+                    <filter name="group_by_date_to" string="End Date" context="{'group_by': 'date_to'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Payslip Form View Inheritance -->
+    <record id="view_hr_payslip_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="matricule"/>
+                <field name="payment_method"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Moroccan Payroll Details">
+                    <group>
+                        <group string="Seniority">
+                            <field name="seniority_years"/>
+                            <field name="seniority_rate"/>
+                            <field name="seniority_amount"/>
+                        </group>
+                        <group string="CNSS and AMO">
+                            <field name="cnss_base"/>
+                            <field name="cnss_employee"/>
+                            <field name="cnss_employer"/>
+                            <field name="amo_employee"/>
+                            <field name="amo_employer"/>
+                        </group>
+                        <group string="IR">
+                            <field name="ir_base"/>
+                            <field name="ir_amount"/>
+                        </group>
+                        <group string="Professional Expenses">
+                            <field name="prof_exp_amount"/>
+                        </group>
+                        <group string="Net Salary">
+                            <field name="net_salary"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Payroll Configuration Action -->
+    <record id="action_hr_payroll_config" model="ir.actions.act_window">
+        <field name="name">Payroll Configurations</field>
+        <field name="res_model">hr.payroll.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_payroll_config_search"/>
+    </record>
+    
+    <!-- Menu Items -->
+    <menuitem id="menu_hr_payroll_morocco_root" name="Moroccan Payroll" parent="hr_payroll.menu_hr_payroll_root" sequence="10"/>
+    <menuitem id="menu_hr_payroll_config" name="Configurations" parent="menu_hr_payroll_morocco_root" action="action_hr_payroll_config" sequence="1"/>
+</odoo>

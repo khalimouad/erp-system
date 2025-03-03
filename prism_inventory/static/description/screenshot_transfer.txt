@@ -1,0 +1,2 @@
+This is a placeholder for the transfer management screenshot.
+In a real implementation, this would be a PNG or JPG file showing the transfer management interface with Moroccan-specific features like customs-controlled transfers, quality check requirements, and approval workflows.

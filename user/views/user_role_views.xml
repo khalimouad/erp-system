@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- User Role Form View -->
+    <record id="view_user_role_form" model="ir.ui.view">
+        <field name="name">user.role.form</field>
+        <field name="model">user.role</field>
+        <field name="arch" type="xml">
+            <form string="User Role">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="e.g. Financial Manager"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="max_users"/>
+                            <field name="user_count"/>
+                        </group>
+                        <group>
+                            <field name="is_moroccan_specific"/>
+                            <field name="requires_approval"/>
+                            <field name="approval_user_ids" widget="many2many_tags" 
+                                   attrs="{'invisible': [('requires_approval', '=', False)], 
+                                           'required': [('requires_approval', '=', True)]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Role description..."/>
+                        </page>
+                        <page string="Associated Groups">
+                            <field name="group_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Users">
+                            <field name="user_ids" widget="many2many">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="login"/>
+                                    <field name="email"/>
+                                    <field name="company_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- User Role Tree View -->
+    <record id="view_user_role_tree" model="ir.ui.view">
+        <field name="name">user.role.tree</field>
+        <field name="model">user.role</field>
+        <field name="arch" type="xml">
+            <tree string="User Roles">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_moroccan_specific"/>
+                <field name="requires_approval"/>
+                <field name="user_count"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- User Role Search View -->
+    <record id="view_user_role_search" model="ir.ui.view">
+        <field name="name">user.role.search</field>
+        <field name="model">user.role</field>
+        <field name="arch" type="xml">
+            <search string="Search User Roles">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Moroccan-Specific" name="moroccan" domain="[('is_moroccan_specific', '=', True)]"/>
+                <filter string="Requires Approval" name="approval" domain="[('requires_approval', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Moroccan-Specific" name="group_moroccan" context="{'group_by': 'is_moroccan_specific'}"/>
+                    <filter string="Requires Approval" name="group_approval" context="{'group_by': 'requires_approval'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- User Role Action -->
+    <record id="action_user_role" model="ir.actions.act_window">
+        <field name="name">User Roles</field>
+        <field name="res_model">user.role</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_user_role_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new user role
+            </p>
+            <p>
+                User roles define sets of permissions and access rights.
+                They can be assigned to users to grant them specific access to the system.
+            </p>
+        </field>
+    </record>
+</odoo>

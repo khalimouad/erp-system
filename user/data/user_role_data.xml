@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Moroccan-specific roles -->
+        <record id="user_role_financial_manager_ma" model="user.role">
+            <field name="name">Financial Manager (Morocco)</field>
+            <field name="code">FIN_MGR_MA</field>
+            <field name="description">Financial manager role with Moroccan-specific permissions for accounting, tax, and financial reporting.</field>
+            <field name="is_moroccan_specific" eval="True"/>
+            <field name="requires_approval" eval="True"/>
+            <field name="sequence" eval="10"/>
+            <field name="max_users" eval="5"/>
+            <field name="group_ids" eval="[(4, ref('account.group_account_manager')), (4, ref('account.group_account_user'))]"/>
+        </record>
+
+        <record id="user_role_tax_manager_ma" model="user.role">
+            <field name="name">Tax Manager (Morocco)</field>
+            <field name="code">TAX_MGR_MA</field>
+            <field name="description">Tax manager role with Moroccan-specific permissions for tax declarations, exemptions, and reporting.</field>
+            <field name="is_moroccan_specific" eval="True"/>
+            <field name="requires_approval" eval="True"/>
+            <field name="sequence" eval="20"/>
+            <field name="max_users" eval="3"/>
+            <field name="group_ids" eval="[(4, ref('account.group_account_user'))]"/>
+        </record>
+
+        <record id="user_role_hr_manager_ma" model="user.role">
+            <field name="name">HR Manager (Morocco)</field>
+            <field name="code">HR_MGR_MA</field>
+            <field name="description">HR manager role with Moroccan-specific permissions for employee management, payroll, and HR reporting.</field>
+            <field name="is_moroccan_specific" eval="True"/>
+            <field name="requires_approval" eval="True"/>
+            <field name="sequence" eval="30"/>
+            <field name="max_users" eval="3"/>
+            <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="user_role_inventory_manager_ma" model="user.role">
+            <field name="name">Inventory Manager (Morocco)</field>
+            <field name="code">INV_MGR_MA</field>
+            <field name="description">Inventory manager role with Moroccan-specific permissions for warehouse management, stock movements, and inventory reporting.</field>
+            <field name="is_moroccan_specific" eval="True"/>
+            <field name="requires_approval" eval="True"/>
+            <field name="sequence" eval="40"/>
+            <field name="max_users" eval="5"/>
+            <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="user_role_sales_manager_ma" model="user.role">
+            <field name="name">Sales Manager (Morocco)</field>
+            <field name="code">SALES_MGR_MA</field>
+            <field name="description">Sales manager role with Moroccan-specific permissions for sales orders, bon de livraison, and sales reporting.</field>
+            <field name="is_moroccan_specific" eval="True"/>
+            <field name="requires_approval" eval="True"/>
+            <field name="sequence" eval="50"/>
+            <field name="max_users" eval="5"/>
+            <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="user_role_purchase_manager_ma" model="user.role">
+            <field name="name">Purchase Manager (Morocco)</field>
+            <field name="code">PURCH_MGR_MA</field>
+            <field name="description">Purchase manager role with Moroccan-specific permissions for purchase orders, vendor management, and purchase reporting.</field>
+            <field name="is_moroccan_specific" eval="True"/>
+            <field name="requires_approval" eval="True"/>
+            <field name="sequence" eval="60"/>
+            <field name="max_users" eval="5"/>
+            <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Standard roles -->
+        <record id="user_role_system_admin" model="user.role">
+            <field name="name">System Administrator</field>
+            <field name="code">SYS_ADMIN</field>
+            <field name="description">System administrator role with full access to all system functions.</field>
+            <field name="is_moroccan_specific" eval="False"/>
+            <field name="requires_approval" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="max_users" eval="3"/>
+            <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+
+        <record id="user_role_user_admin" model="user.role">
+            <field name="name">User Administrator</field>
+            <field name="code">USER_ADMIN</field>
+            <field name="description">User administrator role with permissions to manage users, roles, and approvals.</field>
+            <field name="is_moroccan_specific" eval="False"/>
+            <field name="requires_approval" eval="True"/>
+            <field name="sequence" eval="7"/>
+            <field name="max_users" eval="5"/>
+            <field name="group_ids" eval="[(4, ref('base.group_erp_manager'))]"/>
+        </record>
+
+        <record id="user_role_readonly" model="user.role">
+            <field name="name">Read-Only User</field>
+            <field name="code">READ_ONLY</field>
+            <field name="description">Read-only user role with permissions to view but not modify data.</field>
+            <field name="is_moroccan_specific" eval="False"/>
+            <field name="requires_approval" eval="False"/>
+            <field name="sequence" eval="100"/>
+            <field name="max_users" eval="0"/>
+            <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

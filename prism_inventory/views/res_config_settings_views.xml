@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_prism_inventory" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.prism.inventory</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="stock.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='production_lot_info']" position="after">
+                <h2>PRISM Moroccan Inventory</h2>
+                <div class="row mt16 o_settings_container" id="prism_inventory_settings">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="module_prism_inventory"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="module_prism_inventory"/>
+                            <div class="text-muted">
+                                Enable Moroccan-specific inventory features
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Customs Management -->
+                <h2 attrs="{'invisible': [('module_prism_inventory', '=', False)]}">Customs Management</h2>
+                <div class="row mt16 o_settings_container" id="customs_management_settings" attrs="{'invisible': [('module_prism_inventory', '=', False)]}">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="enable_customs_management"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="enable_customs_management"/>
+                            <div class="text-muted">
+                                Enable customs management features for inventory operations
+                            </div>
+                            <div class="content-group" attrs="{'invisible': [('enable_customs_management', '=', False)]}">
+                                <div class="mt16">
+                                    <label for="default_customs_authority" class="o_light_label"/>
+                                    <field name="default_customs_authority"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VAT Settings -->
+                <h2 attrs="{'invisible': [('module_prism_inventory', '=', False)]}">VAT Settings</h2>
+                <div class="row mt16 o_settings_container" id="vat_settings" attrs="{'invisible': [('module_prism_inventory', '=', False)]}">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="enable_vat_exemption"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="enable_vat_exemption"/>
+                            <div class="text-muted">
+                                Enable VAT exemption for certain warehouse types
+                            </div>
+                            <div class="content-group" attrs="{'invisible': [('enable_vat_exemption', '=', False)]}">
+                                <div class="mt16">
+                                    <label for="vat_exemption_document" class="o_light_label"/>
+                                    <field name="vat_exemption_document"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Temperature Control -->
+                <h2 attrs="{'invisible': [('module_prism_inventory', '=', False)]}">Temperature Control</h2>
+                <div class="row mt16 o_settings_container" id="temperature_control_settings" attrs="{'invisible': [('module_prism_inventory', '=', False)]}">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="enable_temperature_control"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="enable_temperature_control"/>
+                            <div class="text-muted">
+                                Enable temperature control features for inventory operations
+                            </div>
+                            <div class="content-group" attrs="{'invisible': [('enable_temperature_control', '=', False)]}">
+                                <div class="mt16">
+                                    <label for="default_temperature_min" class="o_light_label"/>
+                                    <field name="default_temperature_min"/> °C
+                                </div>
+                                <div class="mt16">
+                                    <label for="default_temperature_max" class="o_light_label"/>
+                                    <field name="default_temperature_max"/> °C
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Approval Workflow -->
+                <h2 attrs="{'invisible': [('module_prism_inventory', '=', False)]}">Approval Workflow</h2>
+                <div class="row mt16 o_settings_container" id="approval_workflow_settings" attrs="{'invisible': [('module_prism_inventory', '=', False)]}">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="enable_approval_workflow"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="enable_approval_workflow"/>
+                            <div class="text-muted">
+                                Enable approval workflow for inventory operations
+                            </div>
+                            <div class="content-group" attrs="{'invisible': [('enable_approval_workflow', '=', False)]}">
+                                <div class="mt16">
+                                    <field name="require_manager_approval"/>
+                                    <label for="require_manager_approval"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quality Control -->
+                <h2 attrs="{'invisible': [('module_prism_inventory', '=', False)]}">Quality Control</h2>
+                <div class="row mt16 o_settings_container" id="quality_control_settings" attrs="{'invisible': [('module_prism_inventory', '=', False)]}">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="enable_quality_control"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="enable_quality_control"/>
+                            <div class="text-muted">
+                                Enable quality control features for inventory operations
+                            </div>
+                            <div class="content-group" attrs="{'invisible': [('enable_quality_control', '=', False)]}">
+                                <div class="mt16">
+                                    <label for="default_quality_check_frequency" class="o_light_label"/>
+                                    <field name="default_quality_check_frequency"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lot Tracking -->
+                <h2 attrs="{'invisible': [('module_prism_inventory', '=', False)]}">Lot Tracking</h2>
+                <div class="row mt16 o_settings_container" id="lot_tracking_settings" attrs="{'invisible': [('module_prism_inventory', '=', False)]}">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="enable_lot_tracking"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="enable_lot_tracking"/>
+                            <div class="text-muted">
+                                Enable lot tracking features for inventory operations
+                            </div>
+                            <div class="content-group" attrs="{'invisible': [('enable_lot_tracking', '=', False)]}">
+                                <div class="mt16">
+                                    <field name="require_lot_origin"/>
+                                    <label for="require_lot_origin"/>
+                                </div>
+                                <div class="mt16">
+                                    <field name="require_lot_expiry"/>
+                                    <label for="require_lot_expiry"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reporting -->
+                <h2 attrs="{'invisible': [('module_prism_inventory', '=', False)]}">Reporting</h2>
+                <div class="row mt16 o_settings_container" id="reporting_settings" attrs="{'invisible': [('module_prism_inventory', '=', False)]}">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="enable_enhanced_reporting"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="enable_enhanced_reporting"/>
+                            <div class="text-muted">
+                                Enable enhanced reporting features for inventory operations
+                            </div>
+                            <div class="content-group" attrs="{'invisible': [('enable_enhanced_reporting', '=', False)]}">
+                                <div class="mt16">
+                                    <label for="default_report_currency" class="o_light_label"/>
+                                    <field name="default_report_currency"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Account Account Views -->
+        <record id="view_account_form" model="ir.ui.view">
+            <field name="name">account.account.form</field>
+            <field name="model">account.account</field>
+            <field name="arch" type="xml">
+                <form string="Account">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. Bank Account"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="user_type_id"/>
+                                <field name="internal_type"/>
+                                <field name="internal_group"/>
+                                <field name="reconcile"/>
+                                <field name="deprecated"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="is_moroccan_account"/>
+                                <field name="moroccan_account_class" attrs="{'invisible': [('is_moroccan_account', '=', False)]}"/>
+                                <field name="is_tax_account"/>
+                                <field name="tax_type" attrs="{'invisible': [('is_tax_account', '=', False)]}"/>
+                                <field name="is_vat_account" attrs="{'invisible': [('is_tax_account', '=', False)]}"/>
+                                <field name="vat_type" attrs="{'invisible': [('is_vat_account', '=', False)]}"/>
+                                <field name="is_inventory_account"/>
+                                <field name="inventory_valuation_method" attrs="{'invisible': [('is_inventory_account', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Tags">
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_tree" model="ir.ui.view">
+            <field name="name">account.account.tree</field>
+            <field name="model">account.account</field>
+            <field name="arch" type="xml">
+                <tree string="Chart of Accounts" decoration-info="internal_group=='asset'" decoration-danger="internal_group=='liability'" decoration-success="internal_group=='equity'" decoration-warning="internal_group=='expense'" decoration-primary="internal_group=='income'">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="user_type_id"/>
+                    <field name="internal_type"/>
+                    <field name="internal_group" invisible="1"/>
+                    <field name="reconcile"/>
+                    <field name="deprecated"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_search" model="ir.ui.view">
+            <field name="name">account.account.search</field>
+            <field name="model">account.account</field>
+            <field name="arch" type="xml">
+                <search string="Accounts">
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('code', 'ilike', self)]" string="Account"/>
+                    <field name="user_type_id"/>
+                    <field name="internal_type"/>
+                    <field name="internal_group"/>
+                    <field name="reconcile"/>
+                    <field name="deprecated"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <separator/>
+                    <filter string="Assets" name="assets" domain="[('internal_group', '=', 'asset')]"/>
+                    <filter string="Liabilities" name="liabilities" domain="[('internal_group', '=', 'liability')]"/>
+                    <filter string="Equity" name="equity" domain="[('internal_group', '=', 'equity')]"/>
+                    <filter string="Expenses" name="expenses" domain="[('internal_group', '=', 'expense')]"/>
+                    <filter string="Income" name="income" domain="[('internal_group', '=', 'income')]"/>
+                    <separator/>
+                    <filter string="Receivable" name="receivable" domain="[('internal_type', '=', 'receivable')]"/>
+                    <filter string="Payable" name="payable" domain="[('internal_type', '=', 'payable')]"/>
+                    <filter string="Liquidity" name="liquidity" domain="[('internal_type', '=', 'liquidity')]"/>
+                    <separator/>
+                    <filter string="Reconcilable" name="reconcilable" domain="[('reconcile', '=', True)]"/>
+                    <filter string="Non-Reconcilable" name="non_reconcilable" domain="[('reconcile', '=', False)]"/>
+                    <separator/>
+                    <filter string="Moroccan Accounts" name="moroccan_accounts" domain="[('is_moroccan_account', '=', True)]"/>
+                    <filter string="Tax Accounts" name="tax_accounts" domain="[('is_tax_account', '=', True)]"/>
+                    <filter string="VAT Accounts" name="vat_accounts" domain="[('is_vat_account', '=', True)]"/>
+                    <filter string="Inventory Accounts" name="inventory_accounts" domain="[('is_inventory_account', '=', True)]"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('deprecated', '=', False)]"/>
+                    <filter string="Deprecated" name="deprecated" domain="[('deprecated', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Account Type" name="accounttype" context="{'group_by': 'user_type_id'}"/>
+                        <filter string="Internal Type" name="internaltype" context="{'group_by': 'internal_type'}"/>
+                        <filter string="Internal Group" name="internalgroup" context="{'group_by': 'internal_group'}"/>
+                        <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_form" model="ir.actions.act_window">
+            <field name="name">Chart of Accounts</field>
+            <field name="res_model">account.account</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_account_search"/>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new account
+                </p>
+                <p>
+                    The chart of accounts is organized according to the Moroccan accounting standards.
+                </p>
+            </field>
+        </record>
+
+        <!-- Account Journal Views -->
+        <record id="view_account_journal_form" model="ir.ui.view">
+            <field name="name">account.journal.form</field>
+            <field name="model">account.journal</field>
+            <field name="arch" type="xml">
+                <form string="Journal">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. Bank Journal"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="type"/>
+                                <field name="default_account_id"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="active"/>
+                                <field name="sequence"/>
+                                <field name="is_moroccan_journal"/>
+                                <field name="moroccan_journal_type" attrs="{'invisible': [('is_moroccan_journal', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Advanced Settings" name="advanced_settings">
+                                <group>
+                                    <group string="Accounting">
+                                        <field name="refund_sequence"/>
+                                        <field name="sequence_number_next"/>
+                                    </group>
+                                    <group string="Payments">
+                                        <field name="inbound_payment_method_ids" widget="many2many_tags"/>
+                                        <field name="outbound_payment_method_ids" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_journal_tree" model="ir.ui.view">
+            <field name="name">account.journal.tree</field>
+            <field name="model">account.journal</field>
+            <field name="arch" type="xml">
+                <tree string="Journals">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="type"/>
+                    <field name="default_account_id"/>
+                    <field name="currency_id" groups="base.group_multi_currency"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_journal_search" model="ir.ui.view">
+            <field name="name">account.journal.search</field>
+            <field name="model">account.journal</field>
+            <field name="arch" type="xml">
+                <search string="Journals">
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('code', 'ilike', self)]" string="Journal"/>
+                    <field name="type"/>
+                    <field name="default_account_id"/>
+                    <field name="currency_id" groups="base.group_multi_currency"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <separator/>
+                    <filter string="Sales" name="sales" domain="[('type', '=', 'sale')]"/>
+                    <filter string="Purchases" name="purchases" domain="[('type', '=', 'purchase')]"/>
+                    <filter string="Bank" name="bank" domain="[('type', '=', 'bank')]"/>
+                    <filter string="Cash" name="cash" domain="[('type', '=', 'cash')]"/>
+                    <filter string="Miscellaneous" name="miscellaneous" domain="[('type', '=', 'general')]"/>
+                    <separator/>
+                    <filter string="Moroccan Journals" name="moroccan_journals" domain="[('is_moroccan_journal', '=', True)]"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Type" name="type" context="{'group_by': 'type'}"/>
+                        <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_journal_form" model="ir.actions.act_window">
+            <field name="name">Journals</field>
+            <field name="res_model">account.journal</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_account_journal_search"/>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new journal
+                </p>
+                <p>
+                    Journals are used to record transactions in the accounting system.
+                </p>
+            </field>
+        </record>
+
+        <!-- Account Tax Views -->
+        <record id="view_account_tax_form" model="ir.ui.view">
+            <field name="name">account.tax.form</field>
+            <field name="model">account.tax</field>
+            <field name="arch" type="xml">
+                <form string="Tax">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. VAT 20%"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="type_tax_use"/>
+                                <field name="amount_type"/>
+                                <field name="amount"/>
+                                <field name="description"/>
+                                <field name="tax_group_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="is_moroccan_tax"/>
+                                <field name="moroccan_tax_type" attrs="{'invisible': [('is_moroccan_tax', '=', False)]}"/>
+                                <field name="vat_tax_type" attrs="{'invisible': [('moroccan_tax_type', '!=', 'vat')]}"/>
+                                <field name="is_tax_type" attrs="{'invisible': [('moroccan_tax_type', '!=', 'is')]}"/>
+                                <field name="ir_tax_type" attrs="{'invisible': [('moroccan_tax_type', '!=', 'ir')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Advanced Settings" name="advanced_settings">
+                                <group>
+                                    <group string="Accounting">
+                                        <field name="account_id"/>
+                                        <field name="refund_account_id"/>
+                                    </group>
+                                    <group string="Computation">
+                                        <field name="price_include"/>
+                                        <field name="include_base_amount"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_tax_tree" model="ir.ui.view">
+            <field name="name">account.tax.tree</field>
+            <field name="model">account.tax</field>
+            <field name="arch" type="xml">
+                <tree string="Taxes">
+                    <field name="name"/>
+                    <field name="type_tax_use"/>
+                    <field name="amount_type"/>
+                    <field name="amount"/>
+                    <field name="description"/>
+                    <field name="tax_group_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_tax_search" model="ir.ui.view">
+            <field name="name">account.tax.search</field>
+            <field name="model">account.tax</field>
+            <field name="arch" type="xml">
+                <search string="Taxes">
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]" string="Tax"/>
+                    <field name="type_tax_use"/>
+                    <field name="amount_type"/>
+                    <field name="amount"/>
+                    <field name="tax_group_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <separator/>
+                    <filter string="Sales" name="sales" domain="[('type_tax_use', '=', 'sale')]"/>
+                    <filter string="Purchases" name="purchases" domain="[('type_tax_use', '=', 'purchase')]"/>
+                    <filter string="None" name="none" domain="[('type_tax_use', '=', 'none')]"/>
+                    <separator/>
+                    <filter string="Moroccan Taxes" name="moroccan_taxes" domain="[('is_moroccan_tax', '=', True)]"/>
+                    <filter string="VAT Taxes" name="vat_taxes" domain="[('moroccan_tax_type', '=', 'vat')]"/>
+                    <filter string="IS Taxes" name="is_taxes" domain="[('moroccan_tax_type', '=', 'is')]"/>
+                    <filter string="IR Taxes" name="ir_taxes" domain="[('moroccan_tax_type', '=', 'ir')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Tax Type" name="taxtype" context="{'group_by': 'type_tax_use'}"/>
+                        <filter string="Tax Group" name="taxgroup" context="{'group_by': 'tax_group_id'}"/>
+                        <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_tax_form" model="ir.actions.act_window">
+            <field name="name">Taxes</field>
+            <field name="res_model">account.tax</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_account_tax_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new tax
+                </p>
+                <p>
+                    Taxes are used to calculate the amount of tax to apply on invoices.
+                </p>
+            </field>
+        </record>
+
+        <!-- Account Move Views -->
+        <record id="view_account_move_form" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <form string="Journal Entry">
+                    <header>
+                        <button name="action_post" string="Post" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_draft" string="Reset to Draft" type="object" states="posted"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="posted"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="journal_id"/>
+                                <field name="ref"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                                <field name="is_moroccan_move"/>
+                                <field name="moroccan_move_type" attrs="{'invisible': [('is_moroccan_move', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Journal Items" name="journal_items">
+                                <field name="line_ids" widget="one2many_list">
+                                    <tree string="Journal Items" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="name"/>
+                                        <field name="partner_id"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                        <field name="tax_ids" widget="many2many_tags"/>
+                                        <field name="tax_line_id"/>
+                                        <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                                        <field name="analytic_tag_ids" widget="many2many_tags" groups="analytic.group_analytic_tags"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="company_currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_move_tree" model="ir.ui.view">
+            <field name="name">account.move.tree</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="Journal Entries" decoration-info="state == 'draft'" decoration-muted="state == 'cancel'">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="ref"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_move_search" model="ir.ui.view">
+            <field name="name">account.move.search</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search string="Journal Entries">
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('ref', 'ilike', self)]" string="Journal Entry"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Posted" name="posted" domain="[('state', '=', 'posted')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancel')]"/>
+                    <separator/>
+                    <filter string="Moroccan Moves" name="moroccan_moves" domain="[('is_moroccan_move', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Journal" name="journal" context="{'group_by': 'journal_id'}"/>
+                        <filter string="Status" name="status" context="{'group_by': 'state'}"/>
+                        <filter string="Date" name="date" context="{'group_by': 'date'}"/>
+                        <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_move_form" model="ir.actions.act_window">
+            <field name="name">Journal Entries</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_account_move_search"/>
+            <field name="context">{'search_default_draft': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new journal entry
+                </p>
+                <p>
+                    Journal entries are used to record accounting transactions.
+                </p>
+            </field>
+        </record>
+
+        <!-- Account Move Line Views -->
+        <record id="view_account_move_line_form" model="ir.ui.view">
+            <field name="name">account.move.line.form</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <form string="Journal Item">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="move_id"/>
+                                <field name="account_id"/>
+                                <field name="name"/>
+                                <field name="partner_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="debit"/>
+                                <field name="credit"/>
+                                <field name="balance"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                                <field name="amount_currency" groups="base.group_multi_currency"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Taxes" name="taxes">
+                                <group>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                    <field name="tax_line_id"/>
+                                </group>
+                            </page>
+                            <page string="Analytic" name="analytic">
+                                <group>
+                                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                                    <field name="analytic_tag_ids" widget="many2many_tags" groups="analytic.group_analytic_tags"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_move_line_tree" model="ir.ui.view">
+            <field name="name">account.move.line.tree</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <tree string="Journal Items" create="false" edit="false">
+                    <field name="date"/>
+                    <field name="move_id"/>
+                    <field name="journal_id"/>
+                    <field name="account_id"/>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="debit"/>
+                    <field name="credit"/>
+                    <field name="balance"/>
+                    <field name="currency_id" groups="base.group_multi_currency"/>
+                    <field name="amount_currency" groups="base.group_multi_currency"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_move_line_search" model="ir.ui.view">
+            <field name="name">account.move.line.search</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <search string="Journal Items">
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('ref', 'ilike', self)]" string="Journal Item"/>
+                    <field name="date"/>
+                    <field name="move_id"/>
+                    <field name="journal_id"/>
+                    <field name="account_id"/>
+                    <field name="partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <separator/>
+                    <filter string="Unreconciled" name="unreconciled" domain="[('reconciled', '=', False)]"/>
+                    <filter string="Reconciled" name="reconciled" domain="[('reconciled', '=', True)]"/>
+                    <separator/>
+                    <filter string="Debit > 0" name="debit" domain="[('debit', '>', 0)]"/>
+                    <filter string="Credit > 0" name="credit" domain="[('credit', '>', 0)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Journal" name="journal" context="{'group_by': 'journal_id'}"/>
+                        <filter string="Account" name="account" context="{'group_by': 'account_id'}"/>
+                        <filter string="Partner" name="partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Date" name="date" context="{'group_by': 'date'}"/>
+                        <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_move_line_form" model="ir.actions.act_window">
+            <field name="name">Journal Items</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_account_move_line_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No journal items found
+                </p>
+                <p>
+                    Journal items are created when journal entries are posted.
+                </p>
+            </field>
+        </record>
+
+        <!-- Account Chart Template Views -->
+        <record id="view_account_chart_template_form" model="ir.ui.view">
+            <field name="name">account.chart.template.form</field>
+            <field name="model">account.chart.template</field>
+            <field name="arch" type="xml">
+                <form string="Chart of Accounts Template">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. Moroccan Chart of Accounts"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code_digits"/>
+                                <field name="visible"/>
+                                <field name="currency_id"/>
+                                <field name="bank_account_code_prefix"/>
+                                <field name="cash_account_code_prefix"/>
+                                <field name="transfer_account_code_prefix"/>
+                            </group>
+                            <group>
+                                <field name="is_moroccan_chart"/>
+                                <field name="moroccan_chart_type" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_version" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_language" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_size" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_industry" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_region" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_company_type" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_tax_regime" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_vat_regime" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_fiscal_year" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                                <field name="moroccan_chart_accounting_method" attrs="{'invisible': [('is_moroccan_chart', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Default Accounts" name="default_accounts">
+                                <group>
+                                    <group string="Receivable/Payable">
+                                        <field name="property_account_receivable_id"/>
+                                        <field name="property_account_payable_id"/>
+                                    </group>
+                                    <group string="Income/Expense">
+                                        <field name="property_account_income_categ_id"/>
+                                        <field name="property_account_expense_categ_id"/>
+                                    </group>
+                                    <group string="Stock">
+                                        <field name="property_stock_account_input_categ_id"/>
+                                        <field name="property_stock_account_output_categ_id"/>
+                                        <field name="property_stock_valuation_account_id"/>
+                                    </group>
+                                    <group string="Cash/Bank">
+                                        <field name="bank_account_id"/>
+                                        <field name="income_currency_exchange_account_id"/>
+                                        <field name="expense_currency_exchange_account_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_chart_template_tree" model="ir.ui.view">
+            <field name="name">account.chart.template.tree</field>
+            <field name="model">account.chart.template</field>
+            <field name="arch" type="xml">
+                <tree string="Chart of Accounts Templates">
+                    <field name="name"/>
+                    <field name="code_digits"/>
+                    <field name="visible"/>
+                    <field name="currency_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_chart_template_search" model="ir.ui.view">
+            <field name="name">account.chart.template.search</field>
+            <field name="model">account.chart.template</field>
+            <field name="arch" type="xml">
+                <search string="Chart of Accounts Templates">
+                    <field name="name"/>
+                    <field name="currency_id"/>
+                    <separator/>
+                    <filter string="Visible" name="visible" domain="[('visible', '=', True)]"/>
+                    <filter string="Moroccan Charts" name="moroccan_charts" domain="[('is_moroccan_chart', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Currency" name="currency" context="{'group_by': 'currency_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_chart_template_form" model="ir.actions.act_window">
+            <field name="name">Chart of Accounts Templates</field>
+            <field name="res_model">account.chart.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_account_chart_template_search"/>
+            <field name="context">{'search_default_visible': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new chart of accounts template
+                </p>
+                <p>
+                    Chart of accounts templates are used to create new charts of accounts for companies.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

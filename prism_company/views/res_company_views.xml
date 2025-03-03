@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend the company form view -->
+    <record id="view_company_form_inherit" model="ir.ui.view">
+        <field name="name">res.company.form.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields to the company form -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Moroccan Information" name="moroccan_info">
+                    <group>
+                        <group string="Legal Information">
+                            <field name="ice_number"/>
+                            <field name="rc_number"/>
+                            <field name="cnss_number"/>
+                            <field name="legal_form"/>
+                            <field name="region"/>
+                        </group>
+                        <group string="Business Classification">
+                            <field name="is_sme"/>
+                            <field name="is_exporter"/>
+                            <field name="is_in_free_zone"/>
+                            <field name="free_zone_name" attrs="{'invisible': [('is_in_free_zone', '=', False)], 'required': [('is_in_free_zone', '=', True)]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Tax Information">
+                            <field name="has_tax_exemption"/>
+                            <field name="tax_exemption_type" attrs="{'invisible': [('has_tax_exemption', '=', False)], 'required': [('has_tax_exemption', '=', True)]}"/>
+                            <field name="tax_exemption_expiry" attrs="{'invisible': [('has_tax_exemption', '=', False)]}"/>
+                            <field name="vat_filing_frequency"/>
+                        </group>
+                        <group string="Accounting Settings">
+                            <field name="accounting_method"/>
+                            <label for="fiscal_year_start_month" string="Fiscal Year Start"/>
+                            <div class="o_row">
+                                <field name="fiscal_year_start_day" class="oe_inline"/>
+                                <span>/</span>
+                                <field name="fiscal_year_start_month" class="oe_inline"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group string="Social Media">
+                        <field name="website" widget="url"/>
+                        <field name="social_facebook" widget="url"/>
+                        <field name="social_twitter" widget="url"/>
+                        <field name="social_linkedin" widget="url"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

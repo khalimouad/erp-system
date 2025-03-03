@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Stock Warehouse Form View -->
+    <record id="view_warehouse_form_inherit" model="ir.ui.view">
+        <field name="name">stock.warehouse.form.inherit</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields -->
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="warehouse_type"/>
+                <field name="is_vat_exempt"/>
+                <field name="requires_customs_clearance"/>
+            </xpath>
+            
+            <!-- Add customs fields -->
+            <xpath expr="//page[@name='warehouse_config']" position="after">
+                <page string="Customs Information" name="customs_info" attrs="{'invisible': [('warehouse_type', '=', 'standard')]}">
+                    <group>
+                        <group string="Customs Details">
+                            <field name="customs_code" attrs="{'required': [('warehouse_type', 'in', ['bonded', 'free_zone', 'transit'])]}"/>
+                            <field name="customs_authorization" attrs="{'required': [('warehouse_type', 'in', ['bonded', 'free_zone', 'transit'])]}"/>
+                            <field name="customs_authorization_date"/>
+                            <field name="customs_officer_id"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Add capacity and security fields -->
+            <xpath expr="//page[@name='warehouse_config']" position="after">
+                <page string="Capacity and Security" name="capacity_security">
+                    <group>
+                        <group string="Capacity">
+                            <field name="max_storage_capacity"/>
+                            <field name="current_occupancy" widget="progressbar"/>
+                        </group>
+                        <group string="Security">
+                            <field name="has_security_cameras"/>
+                            <field name="has_fire_system"/>
+                            <field name="has_temperature_control"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('has_temperature_control', '=', False)]}">
+                        <group string="Temperature Control">
+                            <field name="temperature_min" attrs="{'required': [('has_temperature_control', '=', True)]}"/>
+                            <field name="temperature_max" attrs="{'required': [('has_temperature_control', '=', True)]}"/>
+                            <field name="humidity_min"/>
+                            <field name="humidity_max"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Inspection">
+                            <field name="last_inspection_date"/>
+                            <field name="next_inspection_date"/>
+                            <button name="action_schedule_inspection" string="Schedule Next Inspection" type="object" 
+                                    class="oe_highlight" attrs="{'invisible': [('last_inspection_date', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <group string="Inspection Notes">
+                        <field name="inspection_notes" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Location Form View -->
+    <record id="view_location_form_inherit" model="ir.ui.view">
+        <field name="name">stock.location.form.inherit</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields -->
+            <xpath expr="//field[@name='usage']" position="after">
+                <field name="location_type_id"/>
+                <field name="location_type_code" invisible="1"/>
+                <field name="requires_approval"/>
+                <field name="restricted_access"/>
+            </xpath>
+            
+            <!-- Add capacity fields -->
+            <xpath expr="//group[@name='localization']" position="after">
+                <group name="capacity" string="Capacity">
+                    <field name="max_capacity"/>
+                    <field name="current_occupancy" widget="progressbar"/>
+                </group>
+            </xpath>
+            
+            <!-- Add temperature control fields -->
+            <xpath expr="//group[@name='capacity']" position="after">
+                <group name="temperature" string="Temperature Control" attrs="{'invisible': [('has_temperature_control', '=', False)]}">
+                    <field name="has_temperature_control" invisible="0"/>
+                    <field name="temperature_min" attrs="{'required': [('has_temperature_control', '=', True)]}"/>
+                    <field name="temperature_max" attrs="{'required': [('has_temperature_control', '=', True)]}"/>
+                    <field name="humidity_min"/>
+                    <field name="humidity_max"/>
+                </group>
+            </xpath>
+            
+            <!-- Add access control fields -->
+            <xpath expr="//group[@name='capacity']" position="after">
+                <group name="access" string="Access Control" attrs="{'invisible': [('restricted_access', '=', False)]}">
+                    <field name="restricted_access" invisible="0"/>
+                    <field name="allowed_user_ids" widget="many2many_tags" attrs="{'required': [('restricted_access', '=', True)]}"/>
+                </group>
+            </xpath>
+            
+            <!-- Add inventory tracking fields -->
+            <xpath expr="//group[@name='capacity']" position="after">
+                <group name="inventory" string="Inventory Tracking">
+                    <field name="last_inventory_date"/>
+                    <field name="next_inventory_date"/>
+                    <field name="inventory_frequency"/>
+                    <button name="action_schedule_inventory" string="Schedule Next Inventory" type="object" 
+                            class="oe_highlight" attrs="{'invisible': [('last_inventory_date', '=', False)]}"/>
+                </group>
+            </xpath>
+            
+            <!-- Add customs fields -->
+            <xpath expr="//group[@name='capacity']" position="after">
+                <group name="customs" string="Customs" attrs="{'invisible': [('location_type_code', '!=', 'customs')]}">
+                    <field name="customs_controlled"/>
+                    <field name="customs_document_required"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Production Lot Form View -->
+    <record id="view_production_lot_form_inherit" model="ir.ui.view">
+        <field name="name">stock.production.lot.form.inherit</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields -->
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="origin_type"/>
+                <field name="is_sample"/>
+                <field name="is_quarantine"/>
+            </xpath>
+            
+            <!-- Add customs fields -->
+            <xpath expr="//group[@name='main_group']" position="after">
+                <group name="customs" string="Customs Information" attrs="{'invisible': [('origin_type', '=', 'domestic')]}">
+                    <field name="customs_document" attrs="{'required': [('origin_type', 'in', ['imported', 'free_zone'])]}"/>
+                    <field name="customs_date" attrs="{'required': [('origin_type', 'in', ['imported', 'free_zone'])]}"/>
+                </group>
+            </xpath>
+            
+            <!-- Add traceability fields -->
+            <xpath expr="//group[@name='main_group']" position="after">
+                <group name="traceability" string="Traceability">
+                    <field name="manufacturer_id"/>
+                    <field name="manufacturer_date"/>
+                    <field name="best_before_date"/>
+                    <field name="expiry_date"/>
+                    <field name="use_days"/>
+                    <field name="days_until_expiry"/>
+                    <field name="expiry_alert" widget="boolean_toggle"/>
+                </group>
+            </xpath>
+            
+            <!-- Add quality control fields -->
+            <xpath expr="//group[@name='main_group']" position="after">
+                <group name="quality" string="Quality Control">
+                    <field name="quality_state"/>
+                    <field name="quality_check_date"/>
+                    <field name="quality_checked_by"/>
+                    <field name="quality_notes"/>
+                </group>
+            </xpath>
+            
+            <!-- Add quarantine fields -->
+            <xpath expr="//group[@name='main_group']" position="after">
+                <group name="quarantine" string="Quarantine" attrs="{'invisible': [('is_quarantine', '=', False)]}">
+                    <field name="quarantine_reason" attrs="{'required': [('is_quarantine', '=', True)]}"/>
+                    <field name="quarantine_until" attrs="{'required': [('is_quarantine', '=', True)]}"/>
+                </group>
+            </xpath>
+            
+            <!-- Add action buttons -->
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_quality_approve" string="Approve Quality" type="object" 
+                            attrs="{'invisible': [('quality_state', 'not in', ['draft', 'pending'])]}"
+                            class="oe_highlight"/>
+                    <button name="action_quality_reject" string="Reject Quality" type="object" 
+                            attrs="{'invisible': [('quality_state', 'not in', ['draft', 'pending'])]}"
+                            class="btn-danger"/>
+                    <button name="action_set_quarantine" string="Set Quarantine" type="object" 
+                            attrs="{'invisible': [('is_quarantine', '=', True)]}"
+                            class="btn-warning"/>
+                    <button name="action_release_quarantine" string="Release from Quarantine" type="object" 
+                            attrs="{'invisible': [('is_quarantine', '=', False)]}"
+                            class="btn-success"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Picking Form View -->
+    <record id="view_picking_form_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields -->
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="picking_type_category"/>
+                <field name="reference_number"/>
+            </xpath>
+            
+            <!-- Add customs fields -->
+            <xpath expr="//page[@name='extra']" position="after">
+                <page string="Customs Information" name="customs_info" attrs="{'invisible': [('picking_type_category', 'not in', ['customs'])]}">
+                    <group>
+                        <group string="Customs Details">
+                            <field name="customs_document"/>
+                            <field name="customs_date"/>
+                            <field name="customs_officer_id"/>
+                        </group>
+                        <group string="VAT Information">
+                            <field name="is_vat_exempt"/>
+                            <field name="vat_exemption_reason" attrs="{'invisible': [('is_vat_exempt', '=', False)], 'required': [('is_vat_exempt', '=', True)]}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Add quality control fields -->
+            <xpath expr="//page[@name='extra']" position="after">
+                <page string="Quality Control" name="quality_control" attrs="{'invisible': [('quality_check_required', '=', False)]}">
+                    <group>
+                        <group string="Quality Status">
+                            <field name="quality_check_required" invisible="0"/>
+                            <field name="quality_state"/>
+                            <field name="quality_check_date"/>
+                            <field name="quality_checked_by"/>
+                        </group>
+                    </group>
+                    <group string="Quality Notes">
+                        <field name="quality_notes" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Add approval workflow fields -->
+            <xpath expr="//page[@name='extra']" position="after">
+                <page string="Approval" name="approval" attrs="{'invisible': [('requires_approval', '=', False)]}">
+                    <group>
+                        <group string="Approval Status">
+                            <field name="requires_approval" invisible="0"/>
+                            <field name="approval_state"/>
+                            <field name="approved_by" attrs="{'invisible': [('approval_state', '!=', 'approved')]}"/>
+                            <field name="approval_date" attrs="{'invisible': [('approval_state', '!=', 'approved')]}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Add transportation fields -->
+            <xpath expr="//page[@name='extra']" position="after">
+                <page string="Transportation" name="transportation">
+                    <group>
+                        <group string="Transport Details">
+                            <field name="transport_mode"/>
+                            <field name="carrier_id"/>
+                            <field name="vehicle_number"/>
+                            <field name="driver_id"/>
+                            <field name="driver_phone"/>
+                        </group>
+                        <group string="Temperature Control" attrs="{'invisible': [('temperature_required', '=', False)]}">
+                            <field name="temperature_required"/>
+                            <field name="temperature_min" attrs="{'required': [('temperature_required', '=', True)]}"/>
+                            <field name="temperature_max" attrs="{'required': [('temperature_required', '=', True)]}"/>
+                            <field name="actual_temperature"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Add action buttons -->
+            <xpath expr="//header" position="inside">
+                <field name="requires_approval" invisible="1"/>
+                <field name="approval_state" invisible="1"/>
+                <button name="action_request_approval" string="Request Approval" type="object" 
+                        attrs="{'invisible': ['|', ('requires_approval', '=', False), ('approval_state', 'not in', ['not_required'])]}"
+                        class="btn-primary"/>
+                <button name="action_approve" string="Approve" type="object" 
+                        attrs="{'invisible': [('approval_state', '!=', 'pending')]}"
+                        groups="stock.group_stock_manager"
+                        class="btn-success"/>
+                <button name="action_reject" string="Reject" type="object" 
+                        attrs="{'invisible': [('approval_state', '!=', 'pending')]}"
+                        groups="stock.group_stock_manager"
+                        class="btn-danger"/>
+                <field name="quality_check_required" invisible="1"/>
+                <field name="quality_state" invisible="1"/>
+                <button name="action_quality_pass" string="Pass Quality Check" type="object" 
+                        attrs="{'invisible': ['|', ('quality_check_required', '=', False), ('quality_state', '!=', 'pending')]}"
+                        class="btn-success"/>
+                <button name="action_quality_fail" string="Fail Quality Check" type="object" 
+                        attrs="{'invisible': ['|', ('quality_check_required', '=', False), ('quality_state', '!=', 'pending')]}"
+                        class="btn-danger"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Move Form View -->
+    <record id="view_move_form_inherit" model="ir.ui.view">
+        <field name="name">stock.move.form.inherit</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields -->
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="customs_status"/>
+                <field name="requires_lot"/>
+            </xpath>
+            
+            <!-- Add customs fields -->
+            <xpath expr="//group[@name='main_grp']" position="after">
+                <group name="customs" string="Customs Information" attrs="{'invisible': [('customs_status', '=', 'not_applicable')]}">
+                    <field name="customs_document"/>
+                    <field name="customs_date"/>
+                    <field name="customs_value"/>
+                    <field name="customs_duty"/>
+                    <field name="import_vat"/>
+                    <field name="total_landed_cost"/>
+                </group>
+            </xpath>
+            
+            <!-- Add quality control fields -->
+            <xpath expr="//group[@name='main_grp']" position="after">
+                <group name="quality" string="Quality Control" attrs="{'invisible': [('quality_check_required', '=', False)]}">
+                    <field name="quality_check_required" invisible="0"/>
+                    <field name="quality_state"/>
+                    <field name="quality_check_date"/>
+                    <field name="quality_checked_by"/>
+                    <field name="quality_notes"/>
+                </group>
+            </xpath>
+            
+            <!-- Add temperature control fields -->
+            <xpath expr="//group[@name='main_grp']" position="after">
+                <group name="temperature" string="Temperature Control" attrs="{'invisible': [('temperature_required', '=', False)]}">
+                    <field name="temperature_required" invisible="0"/>
+                    <field name="temperature_min" attrs="{'required': [('temperature_required', '=', True)]}"/>
+                    <field name="temperature_max" attrs="{'required': [('temperature_required', '=', True)]}"/>
+                    <field name="actual_temperature"/>
+                </group>
+            </xpath>
+            
+            <!-- Add action buttons -->
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <field name="quality_check_required" invisible="1"/>
+                    <field name="quality_state" invisible="1"/>
+                    <button name="action_quality_pass" string="Pass Quality Check" type="object" 
+                            attrs="{'invisible': ['|', ('quality_check_required', '=', False), ('quality_state', '!=', 'pending')]}"
+                            class="btn-success"/>
+                    <button name="action_quality_fail" string="Fail Quality Check" type="object" 
+                            attrs="{'invisible': ['|', ('quality_check_required', '=', False), ('quality_state', '!=', 'pending')]}"
+                            class="btn-danger"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Quant Form View -->
+    <record id="view_stock_quant_form_inherit" model="ir.ui.view">
+        <field name="name">stock.quant.form.inherit</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields -->
+            <xpath expr="//field[@name='lot_id']" position="after">
+                <field name="customs_status"/>
+                <field name="quality_state"/>
+            </xpath>
+            
+            <!-- Add lot tracking fields -->
+            <xpath expr="//group[@name='lot_serial']" position="after">
+                <group name="lot_info" string="Lot Information" attrs="{'invisible': [('lot_id', '=', False)]}">
+                    <field name="lot_origin_type"/>
+                    <field name="lot_expiry_date"/>
+                    <field name="lot_days_until_expiry"/>
+                    <field name="lot_expiry_alert" widget="boolean_toggle"/>
+                    <field name="lot_is_quarantine" widget="boolean_toggle"/>
+                </group>
+            </xpath>
+            
+            <!-- Add location information -->
+            <xpath expr="//group[@name='lot_serial']" position="after">
+                <group name="location_info" string="Location Information">
+                    <field name="location_type"/>
+                    <field name="has_temperature_control"/>
+                    <field name="temperature_min" attrs="{'invisible': [('has_temperature_control', '=', False)]}"/>
+                    <field name="temperature_max" attrs="{'invisible': [('has_temperature_control', '=', False)]}"/>
+                </group>
+            </xpath>
+            
+            <!-- Add inventory tracking fields -->
+            <xpath expr="//group[@name='lot_serial']" position="after">
+                <group name="inventory" string="Inventory Tracking">
+                    <field name="last_inventory_date"/>
+                    <field name="last_counted_by"/>
+                </group>
+            </xpath>
+            
+            <!-- Add value in MAD -->
+            <xpath expr="//field[@name='value']" position="after">
+                <field name="company_currency_id" invisible="1"/>
+                <field name="mad_currency_id" invisible="1"/>
+                <field name="value_mad" attrs="{'invisible': [('company_currency_id', '=', 'mad_currency_id')]}"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Inventory Form View -->
+    <record id="view_inventory_form_inherit" model="ir.ui.view">
+        <field name="name">stock.inventory.form.inherit</field>
+        <field name="model">stock.inventory</field>
+        <field name="inherit_id" ref="stock.view_inventory_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields -->
+            <xpath expr="//field[@name='location_ids']" position="after">
+                <field name="inventory_type"/>
+                <field name="reference_number"/>
+                <field name="inventory_reason"/>
+            </xpath>
+            
+            <!-- Add responsible parties -->
+            <xpath expr="//group[@name='inventory_info']" position="after">
+                <group name="responsible" string="Responsible Parties">
+                    <field name="responsible_id"/>
+                    <field name="supervisor_id"/>
+                </group>
+            </xpath>
+            
+            <!-- Add scheduling information -->
+            <xpath expr="//group[@name='inventory_info']" position="after">
+                <group name="scheduling" string="Scheduling">
+                    <field name="scheduled_date"/>
+                    <field name="completion_date"/>
+                    <field name="duration" widget="float_time"/>
+                </group>
+            </xpath>
+            
+            <!-- Add approval workflow fields -->
+            <xpath expr="//group[@name='inventory_info']" position="after">
+                <group name="approval" string="Approval" attrs="{'invisible': [('requires_approval', '=', False)]}">
+                    <field name="requires_approval" invisible="0"/>
+                    <field name="approval_state"/>
+                    <field name="approved_by" attrs="{'invisible': [('approval_state', '!=', 'approved')]}"/>
+                    <field name="approval_date" attrs="{'invisible': [('approval_state', '!=', 'approved')]}"/>
+                </group>
+            </xpath>
+            
+            <!-- Add notes -->
+            <xpath expr="//notebook" position="before">
+                <group name="notes" string="Inventory Notes">
+                    <field name="inventory_notes" nolabel="1"/>
+                </group>
+            </xpath>
+            
+            <!-- Add value in MAD -->
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="company_currency_id" invisible="1"/>
+                <field name="mad_currency_id" invisible="1"/>
+                <field name="total_value_mad" attrs="{'invisible': [('company_currency_id', '=', 'mad_currency_id')]}"/>
+            </xpath>
+            
+            <!-- Add action buttons -->
+            <xpath expr="//header" position="inside">
+                <field name="requires_approval" invisible="1"/>
+                <field name="approval_state" invisible="1"/>
+                <button name="action_request_approval" string="Request Approval" type="object" 
+                        attrs="{'invisible': ['|', ('requires_approval', '=', False), ('approval_state', 'not in', ['not_required']), ('state', 'not in', ['draft'])]}"
+                        class="btn-primary"/>
+                <button name="action_approve" string="Approve" type="object" 
+                        attrs="{'invisible': [('approval_state', '!=', 'pending')]}"
+                        groups="stock.group_stock_manager"
+                        class="btn-success"/>
+                <button name="action_reject" string="Reject" type="object" 
+                        attrs="{'invisible': [('approval_state', '!=', 'pending')]}"
+                        groups="stock.group_stock_manager"
+                        class="btn-danger"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Warehouse Tree View -->
+    <record id="view_warehouse_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.warehouse.tree.inherit</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="warehouse_type"/>
+                <field name="current_occupancy" widget="progressbar"/>
+                <field name="has_temperature_control"/>
+                <field name="next_inspection_date"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Location Tree View -->
+    <record id="view_location_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.location.tree.inherit</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_tree2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='usage']" position="after">
+                <field name="location_type_id"/>
+                <field name="current_occupancy" widget="progressbar"/>
+                <field name="has_temperature_control"/>
+                <field name="restricted_access"/>
+                <field name="next_inventory_date"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Production Lot Tree View -->
+    <record id="view_production_lot_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.production.lot.tree.inherit</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="origin_type"/>
+                <field name="manufacturer_date"/>
+                <field name="expiry_date"/>
+                <field name="days_until_expiry"/>
+                <field name="expiry_alert" widget="boolean_toggle"/>
+                <field name="quality_state"/>
+                <field name="is_quarantine" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Picking Tree View -->
+    <record id="view_picking_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.tree.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="picking_type_category"/>
+                <field name="reference_number" optional="show"/>
+                <field name="quality_state" optional="show"/>
+                <field name="approval_state" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Move Tree View -->
+    <record id="view_move_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.move.tree.inherit</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="customs_status" optional="show"/>
+                <field name="quality_state" optional="show"/>
+                <field name="requires_lot" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Quant Tree View -->
+    <record id="view_stock_quant_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.quant.tree.inherit</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lot_id']" position="after">
+                <field name="lot_expiry_date" optional="show"/>
+                <field name="lot_days_until_expiry" optional="show"/>
+                <field name="lot_expiry_alert" widget="boolean_toggle" optional="show"/>
+                <field name="lot_is_quarantine" widget="boolean_toggle" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='value']" position="after">
+                <field name="value_mad" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Inventory Tree View -->
+    <record id="view_inventory_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.inventory.tree.inherit</field>
+        <field name="model">stock.inventory</field>
+        <field name="inherit_id" ref="stock.view_inventory_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="inventory_type"/>
+                <field name="inventory_reason"/>
+                <field name="reference_number" optional="show"/>
+                <field name="approval_state" optional="show"/>
+                <field name="total_value_mad" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Stock Warehouse Search View -->
+    <record id="view_warehouse_search_inherit" model="ir.ui.view">
+        <field name="name">stock.warehouse.search.inherit</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="warehouse_type"/>
+                <field name="customs_code"/>
+            </xpath>
+            <xpath expr="//filter[@name='inactive']" position="after">
+                <separator/>
+                <filter string="Standard Warehouses" name="standard_warehouses" domain="[('warehouse_type', '=', 'standard')]"/>
+                <filter string="Bonded Warehouses" name="bonded_warehouses" domain="[('warehouse_type', '=', 'bonded')]"/>
+                <filter string="Free Zone Warehouses" name="free_zone_warehouses" domain="[('warehouse_type', '=', 'free_zone')]"/>
+                <filter string="Transit Warehouses" name="

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Add partner type selection at the top -->
+            <xpath expr="//field[@name='type']" position="before">
+                <field name="partner_type" widget="radio" options="{'horizontal': true}" attrs="{'invisible': [('parent_id', '!=', False)]}"/>
+                <field name="is_customer" invisible="1"/>
+                <field name="is_vendor" invisible="1"/>
+            </xpath>
+            
+            <!-- Add Moroccan-specific fields in a new page -->
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page string="Moroccan Information" name="moroccan_info" attrs="{'invisible': [('is_company', '=', False)]}">
+                    <group>
+                        <group string="Legal Information">
+                            <field name="ice_number"/>
+                            <field name="rc_number"/>
+                            <field name="cnss_number"/>
+                        </group>
+                        <group string="Contact Information">
+                            <field name="contact_person"/>
+                            <field name="job_title"/>
+                            <field name="department"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Payment Information">
+                            <field name="payment_terms"/>
+                            <field name="custom_payment_terms" attrs="{'invisible': [('payment_terms', '!=', 'custom')], 'required': [('payment_terms', '=', 'custom')]}"/>
+                            <field name="credit_limit"/>
+                            <field name="partner_category"/>
+                        </group>
+                        <group string="Bank Information">
+                            <field name="bank_name"/>
+                            <field name="bank_account_number"/>
+                            <field name="bank_swift"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Add due invoices information in the sales_purchases page -->
+            <xpath expr="//page[@name='sales_purchases']//group[@name='purchase']" position="after">
+                <group name="invoices" string="Invoices" attrs="{'invisible': [('is_company', '=', False)]}">
+                    <div class="row">
+                        <div class="col-6">
+                            <button name="action_view_due_invoices" type="object" class="oe_stat_button" icon="fa-money">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="due_invoice_count"/> (<field name="due_invoice_amount" widget="monetary"/>)
+                                    </span>
+                                    <span class="o_stat_text">Due Invoices</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button name="action_view_overdue_invoices" type="object" class="oe_stat_button" icon="fa-exclamation-triangle">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value text-danger">
+                                        <field name="overdue_invoice_count"/> (<field name="overdue_invoice_amount" widget="monetary"/>)
+                                    </span>
+                                    <span class="o_stat_text">Overdue Invoices</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </group>
+            </xpath>
+            
+            <!-- Add is_active field -->
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="is_active" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Kanban View -->
+    <record id="view_partner_kanban_inherit" model="ir.ui.view">
+        <field name="name">res.partner.kanban.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <!-- Add partner type and category to kanban card -->
+            <xpath expr="//div[hasclass('oe_kanban_details')]//ul/li[1]" position="before">
+                <li t-if="record.partner_type.raw_value">
+                    <field name="partner_type"/>
+                </li>
+                <li t-if="record.partner_category.raw_value">
+                    <field name="partner_category"/>
+                </li>
+            </xpath>
+            
+            <!-- Add due invoices information to kanban card -->
+            <xpath expr="//div[hasclass('oe_kanban_details')]//ul" position="inside">
+                <li t-if="record.due_invoice_count.raw_value > 0" class="text-warning">
+                    <strong>Due: </strong> <field name="due_invoice_count"/> (<field name="due_invoice_amount"/>)
+                </li>
+                <li t-if="record.overdue_invoice_count.raw_value > 0" class="text-danger">
+                    <strong>Overdue: </strong> <field name="overdue_invoice_count"/> (<field name="overdue_invoice_amount"/>)
+                </li>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- List View -->
+    <record id="view_partner_tree_inherit" model="ir.ui.view">
+        <field name="name">res.partner.tree.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <!-- Add partner type and Moroccan fields to list view -->
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="partner_type"/>
+                <field name="partner_category"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='phone']" position="after">
+                <field name="ice_number" optional="show"/>
+                <field name="due_invoice_count" optional="show"/>
+                <field name="due_invoice_amount" optional="show" sum="Total Due"/>
+                <field name="overdue_invoice_count" optional="show"/>
+                <field name="overdue_invoice_amount" optional="show" sum="Total Overdue"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Search View -->
+    <record id="view_res_partner_filter_inherit" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <!-- Add partner type and Moroccan fields to search view -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="ice_number"/>
+                <field name="rc_number"/>
+                <field name="cnss_number"/>
+                <field name="contact_person"/>
+            </xpath>
+            
+            <xpath expr="//filter[@name='supplier']" position="after">
+                <filter string="With Due Invoices" name="due_invoices" domain="[('due_invoice_count', '>', 0)]"/>
+                <filter string="With Overdue Invoices" name="overdue_invoices" domain="[('overdue_invoice_count', '>', 0)]"/>
+            </xpath>
+            
+            <xpath expr="//group" position="inside">
+                <filter string="Partner Type" name="partner_type" context="{'group_by': 'partner_type'}"/>
+                <filter string="Partner Category" name="partner_category" context="{'group_by': 'partner_category'}"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Action for Customers -->
+    <record id="action_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_customer', '=', True)]</field>
+        <field name="context">{'default_is_customer': True, 'default_partner_type': 'customer'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new customer
+            </p>
+        </field>
+    </record>
+    
+    <!-- Action for Vendors -->
+    <record id="action_vendor" model="ir.actions.act_window">
+        <field name="name">Vendors</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_vendor', '=', True)]</field>
+        <field name="context">{'default_is_vendor': True, 'default_partner_type': 'vendor'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new vendor
+            </p>
+        </field>
+    </record>
+    
+    <!-- Menu Items -->
+    <menuitem id="menu_partner_root" name="Partners" sequence="10"/>
+    <menuitem id="menu_partner_customer" name="Customers" parent="menu_partner_root" action="action_customer" sequence="10"/>
+    <menuitem id="menu_partner_vendor" name="Vendors" parent="menu_partner_root" action="action_vendor" sequence="20"/>
+</odoo>

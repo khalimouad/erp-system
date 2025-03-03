@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Product Template Form View -->
+    <record id="product_template_form_view_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields to the general information page -->
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="product_classification"/>
+                <field name="is_service"/>
+                <field name="local_code"/>
+                <field name="vat_rate"/>
+            </xpath>
+            
+            <!-- Add a new page for inventory management -->
+            <xpath expr="//page[@name='inventory']" position="after">
+                <page string="Inventory Management" name="inventory_management">
+                    <group>
+                        <group string="Stock Levels">
+                            <field name="min_stock"/>
+                            <field name="max_stock"/>
+                            <field name="reorder_qty"/>
+                            <field name="lead_time"/>
+                            <field name="shelf_life"/>
+                            <field name="stock_value" widget="monetary"/>
+                        </group>
+                        <group string="Origin">
+                            <field name="country_of_origin"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Add accounting fields to the accounting page -->
+            <xpath expr="//page[@name='invoicing']" position="inside">
+                <group string="Accounts">
+                    <field name="purchase_account_id"/>
+                    <field name="sale_account_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Product Category Form View -->
+    <record id="product_category_form_view_inherit" model="ir.ui.view">
+        <field name="name">product.category.form.inherit</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Add fields to the form view -->
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="default_vat_rate"/>
+                <field name="is_active"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="description" placeholder="Category description..."/>
+            </xpath>
+            
+            <!-- Add accounting information -->
+            <xpath expr="//group" position="after">
+                <group string="Accounting Information">
+                    <field name="purchase_account_id"/>
+                    <field name="sale_account_id"/>
+                    <field name="stock_account_id"/>
+                    <field name="stock_input_account_id"/>
+                    <field name="stock_output_account_id"/>
+                </group>
+            </xpath>
+            
+            <!-- Add statistics and action buttons -->
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_products" type="object" class="oe_stat_button" icon="fa-cubes">
+                        <field name="product_count" widget="statinfo" string="Products"/>
+                    </button>
+                    <button name="action_open_conversion_wizard" type="object" 
+                            class="oe_stat_button" icon="fa-exchange" string="Convert"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- UoM Form View -->
+    <record id="uom_uom_form_view_inherit" model="ir.ui.view">
+        <field name="name">uom.uom.form.inherit</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Add fields to the form view -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="local_name"/>
+                <field name="abbreviation"/>
+                <field name="is_active"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='rounding']" position="after">
+                <field name="description" placeholder="UoM description..."/>
+                <field name="decimal_precision"/>
+                <field name="display_format"/>
+            </xpath>
+            
+            <!-- Add statistics and action buttons -->
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_products" type="object" class="oe_stat_button" icon="fa-cubes">
+                        <field name="product_count" widget="statinfo" string="Products"/>
+                    </button>
+                    <button name="action_open_conversion_wizard" type="object" 
+                            class="oe_stat_button" icon="fa-exchange" string="Convert"/>
+                </div>
+                
+                <notebook>
+                    <page string="Conversion Statistics" name="conversion_stats">
+                        <group>
+                            <field name="last_conversion_date"/>
+                            <field name="conversion_count"/>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Product Template Tree View -->
+    <record id="product_template_tree_view_inherit" model="ir.ui.view">
+        <field name="name">product.template.tree.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <!-- Add fields to the tree view -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="local_code"/>
+                <field name="product_classification"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='standard_price']" position="after">
+                <field name="vat_rate"/>
+                <field name="qty_available" optional="show"/>
+                <field name="min_stock" optional="hide"/>
+                <field name="max_stock" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Product Template Kanban View -->
+    <record id="product_template_kanban_view_inherit" model="ir.ui.view">
+        <field name="name">product.template.kanban.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_kanban_view"/>
+        <field name="arch" type="xml">
+            <!-- Add fields to the kanban view -->
+            <xpath expr="//div[hasclass('oe_kanban_details')]/strong[1]" position="after">
+                <div t-if="record.local_code.raw_value">
+                    <field name="local_code"/>
+                </div>
+            </xpath>
+            
+            <xpath expr="//div[hasclass('oe_kanban_details')]/ul/li[1]" position="after">
+                <li t-if="record.product_classification.raw_value">
+                    <field name="product_classification"/>
+                </li>
+                <li t-if="record.vat_rate.raw_value">
+                    VAT: <field name="vat_rate"/>%
+                </li>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Product Template Search View -->
+    <record id="product_template_search_view_inherit" model="ir.ui.view">
+        <field name="name">product.template.search.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <!-- Add fields to the search view -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="local_code"/>
+            </xpath>
+            
+            <xpath expr="//filter[@name='consumable']" position="after">
+                <filter string="Services" name="services" domain="[('is_service', '=', True)]"/>
+                <separator/>
+                <filter string="Raw Materials" name="raw_materials" domain="[('product_classification', '=', 'raw')]"/>
+                <filter string="Semi-Finished" name="semi_finished" domain="[('product_classification', '=', 'semi')]"/>
+                <filter string="Finished Products" name="finished_products" domain="[('product_classification', '=', 'finished')]"/>
+                <filter string="Consumables" name="consumables" domain="[('product_classification', '=', 'consumable')]"/>
+                <separator/>
+                <filter string="Standard VAT (20%)" name="standard_vat" domain="[('vat_rate', '=', '20')]"/>
+                <filter string="Reduced VAT (14%)" name="reduced_vat_14" domain="[('vat_rate', '=', '14')]"/>
+                <filter string="Reduced VAT (10%)" name="reduced_vat_10" domain="[('vat_rate', '=', '10')]"/>
+                <filter string="Reduced VAT (7%)" name="reduced_vat_7" domain="[('vat_rate', '=', '7')]"/>
+                <filter string="Exempt (0%)" name="exempt_vat" domain="[('vat_rate', '=', '0')]"/>
+            </xpath>
+            
+            <xpath expr="//group" position="inside">
+                <filter string="VAT Rate" name="groupby_vat_rate" context="{'group_by': 'vat_rate'}"/>
+                <filter string="Classification" name="groupby_classification" context="{'group_by': 'product_classification'}"/>
+                <filter string="Country of Origin" name="groupby_country" context="{'group_by': 'country_of_origin'}"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- UoM Search View -->
+    <record id="uom_uom_search_view_inherit" model="ir.ui.view">
+        <field name="name">uom.uom.search.inherit</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_search_view"/>
+        <field name="arch" type="xml">
+            <!-- Add fields to the search view -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="local_name"/>
+                <field name="abbreviation"/>
+                <field name="description"/>
+            </xpath>
+            
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <filter string="Active" name="active" domain="[('is_active', '=', True)]"/>
+                <separator/>
+            </xpath>
+            
+            <xpath expr="//group" position="inside">
+                <filter string="Category" name="groupby_category" context="{'group_by': 'category_id'}"/>
+                <filter string="Type" name="groupby_type" context="{'group_by': 'uom_type'}"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Actions -->
+    <record id="action_product_template" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="product.product_template_kanban_view"/>
+        <field name="search_view_id" ref="product.product_template_search_view"/>
+        <field name="context">{'search_default_filter_to_sell': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new product
+            </p>
+        </field>
+    </record>
+    
+    <!-- UoM Conversion Wizard -->
+    <record id="view_uom_conversion_wizard_form" model="ir.ui.view">
+        <field name="name">uom.conversion.wizard.form</field>
+        <field name="model">uom.conversion.wizard</field>
+        <field name="arch" type="xml">
+            <form string="UoM Conversion">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Unit of Measure Conversion</h1>
+                    </div>
+                    <group>
+                        <group string="Source">
+                            <field name="source_uom_id" options="{'no_create': True}"/>
+                            <field name="source_quantity"/>
+                            <field name="source_display" readonly="1"/>
+                        </group>
+                        <group string="Target">
+                            <field name="target_uom_id" options="{'no_create': True}"/>
+                            <field name="target_quantity"/>
+                            <field name="target_display" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_swap_uoms" string="Swap Units" type="object" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_uom_conversion_wizard" model="ir.actions.act_window">
+        <field name="name">UoM Conversion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">uom.conversion.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+    <!-- Menu Items -->
+    <menuitem id="menu_product_root" name="Products" sequence="20"/>
+    <menuitem id="menu_product_product" name="Products" parent="menu_product_root" action="action_product_template" sequence="10"/>
+    <menuitem id="menu_product_category" name="Product Categories" parent="menu_product_root" action="product.product_category_action_form" sequence="20"/>
+    <menuitem id="menu_product_uom" name="Units of Measure" parent="menu_product_root" action="uom.product_uom_form_action" sequence="30"/>
+    <menuitem id="menu_uom_conversion" name="UoM Conversion" parent="menu_product_root" action="action_uom_conversion_wizard" sequence="40"/>
+</odoo>

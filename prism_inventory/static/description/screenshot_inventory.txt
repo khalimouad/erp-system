@@ -1,0 +1,2 @@
+This is a placeholder for the inventory operations screenshot.
+In a real implementation, this would be a PNG or JPG file showing the inventory operations interface with Moroccan-specific features like inventory type classification, approval workflows, and multi-currency valuation with MAD support.

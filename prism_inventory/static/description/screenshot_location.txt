@@ -1,0 +1,2 @@
+This is a placeholder for the location management screenshot.
+In a real implementation, this would be a PNG or JPG file showing the location management interface with Moroccan-specific features like customs, quarantine, and temperature-controlled locations.

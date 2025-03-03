@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Contract Form View Inheritance -->
+    <record id="hr_contract_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields to Salary Information section -->
+            <xpath expr="//field[@name='wage']" position="after">
+                <field name="gross_salary" readonly="1"/>
+            </xpath>
+            
+            <!-- Add new notebook page for Moroccan allowances -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Moroccan Allowances" name="moroccan_allowances">
+                    <group>
+                        <group string="Allowances">
+                            <field name="representation_allowance"/>
+                            <field name="transport_allowance"/>
+                            <field name="meal_allowance"/>
+                            <field name="housing_allowance"/>
+                            <field name="housing_advantage"/>
+                            <field name="family_allowance"/>
+                            <field name="professional_expenses"/>
+                            <field name="overtime_allowance"/>
+                        </group>
+                        <group string="Bonuses">
+                            <field name="annual_bonus"/>
+                            <field name="performance_bonus"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Deductions">
+                            <field name="mutual_insurance"/>
+                            <field name="complementary_retirement"/>
+                        </group>
+                        <group string="Contract Details">
+                            <field name="is_fixed_term"/>
+                            <field name="trial_period_duration"/>
+                            <field name="notice_period"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Working Time">
+                            <field name="weekly_hours"/>
+                            <field name="monthly_hours"/>
+                        </group>
+                        <group string="Salary Structure">
+                            <field name="moroccan_salary_structure_id"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Contract Tree View Inheritance -->
+    <record id="hr_contract_view_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.tree.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="wage" position="after">
+                <field name="gross_salary"/>
+                <field name="weekly_hours"/>
+            </field>
+        </field>
+    </record>
+    
+    <!-- Contract Search View Inheritance -->
+    <record id="hr_contract_view_search_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.search.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="moroccan_salary_structure_id"/>
+            </field>
+            <filter name="group_by_state" position="after">
+                <filter string="Contract Type" name="group_by_fixed_term" domain="[]" context="{'group_by': 'is_fixed_term'}"/>
+                <filter string="Salary Structure" name="group_by_structure" domain="[]" context="{'group_by': 'moroccan_salary_structure_id'}"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

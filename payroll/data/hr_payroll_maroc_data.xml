@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fichier data/hr_payroll_maroc_data.xml -->
+<odoo>
+    <data noupdate="1">
+        <!-- Configuration de base -->
+        <record id="hr_payroll_maroc_config_2025" model="hr.payroll.maroc">
+            <field name="name">Configuration Paie Maroc 2025</field>
+            <field name="date_from">2025-01-01</field>
+            <field name="date_to">2025-12-31</field>
+            <field name="active">True</field>
+            
+            <!-- SMIG/SMAG 2025 -->
+            <field name="smig_horaire">17.10</field>
+            <field name="smag_horaire">93.01</field>
+            
+            <!-- CNSS -->
+            <field name="cnss_employee_rate">4.48</field>
+            <field name="cnss_employer_rate">8.98</field>
+            <field name="cnss_af_employer_rate">6.40</field>
+            <field name="cnss_fp_employer_rate">1.60</field>
+            <field name="cnss_ceiling">6000.00</field>
+            
+            <!-- AMO -->
+            <field name="amo_employee_rate">2.26</field>
+            <field name="amo_employer_rate">2.26</field>
+            <field name="amo_contribution_employer_rate">1.85</field>
+            
+            <!-- Ancienneté -->
+            <field name="anciennete_0_2_rate">0.0</field>
+            <field name="anciennete_2_5_rate">5.0</field>
+            <field name="anciennete_5_12_rate">10.0</field>
+            <field name="anciennete_12_20_rate">15.0</field>
+            <field name="anciennete_20_25_rate">20.0</field>
+            <field name="anciennete_25_plus_rate">25.0</field>
+            
+            <!-- Frais Professionnels -->
+            <field name="fp_rate_below_78000">35.0</field>
+            <field name="fp_max_below_78000">30000.0</field>
+            <field name="fp_rate_above_78000">25.0</field>
+            <field name="fp_max_above_78000">35000.0</field>
+            <field name="fp_monthly_ceiling">2916.67</field>
+            
+            <!-- IR - Barème mensuel -->
+            <field name="ir_monthly_threshold_1">3333.00</field>
+            <field name="ir_monthly_threshold_2">5000.00</field>
+            <field name="ir_monthly_threshold_3">6667.00</field>
+            <field name="ir_monthly_threshold_4">8333.00</field>
+            <field name="ir_monthly_threshold_5">15000.00</field>
+            
+            <field name="ir_monthly_rate_1">0.0</field>
+            <field name="ir_monthly_rate_2">10.0</field>
+            <field name="ir_monthly_rate_3">20.0</field>
+            <field name="ir_monthly_rate_4">30.0</field>
+            <field name="ir_monthly_rate_5">34.0</field>
+            <field name="ir_monthly_rate_6">37.0</field>
+            
+            <field name="ir_monthly_deduction_1">0.0</field>
+            <field name="ir_monthly_deduction_2">333.33</field>
+            <field name="ir_monthly_deduction_3">833.33</field>
+            <field name="ir_monthly_deduction_4">1500.00</field>
+            <field name="ir_monthly_deduction_5">1833.33</field>
+            <field name="ir_monthly_deduction_6">2283.33</field>
+            
+            <!-- Charges de famille -->
+            <field name="family_allowance_deduction">41.67</field>
+            
+            <!-- Heures supplémentaires -->
+            <field name="overtime_rate_day_normal">25.0</field>
+            <field name="overtime_rate_night_normal">50.0</field>
+            <field name="overtime_rate_day_holiday">50.0</field>
+            <field name="overtime_rate_night_holiday">100.0</field>
+        </record>
+        
+        <!-- Règles de paie -->
+        <record id="hr_rule_maroc_base" model="hr.salary.rule">
+            <field name="name">Salaire de Base</field>
+            <field name="code">BASE</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.wage</field>
+            <field name="sequence">1</field>
+            <field name="is_maroc_rule">True</field>
+            <field name="maroc_rule_type">base</field>
+        </record>
+        
+        <record id="hr_rule_maroc_anciennete" model="hr.salary.rule">
+            <field name="name">Prime d'Ancienneté</field>
+            <field name="code">ANCIENNETE</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+result = worked_days.WORK100 and worked_days.WORK100.number_of_days > 0
+            </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Get maroc config
+config = env['hr.payroll.maroc'].search([], limit=1)
+
+# Calculate years of service
+date_embauche = employee.date_embauche or employee.create_date.date()
+years_worked = relativedelta(payslip.date_from, date_embauche).years
+months_worked = relativedelta(payslip.date_from, date_embauche).months
+total_months = years_worked * 12 + months_worked
+
+# Determine anciennete rate
+anciennete_rate = 0
+if total_months < 24:  # 0-2 ans
+    anciennete_rate = config.anciennete_0_2_rate
+elif total_months < 60:  # 2-5 ans
+    anciennete_rate = config.anciennete_2_5_rate
+elif total_months < 144:  # 5-12 ans
+    anciennete_rate = config.anciennete_5_12_rate
+elif total_months < 240:  # 12-20 ans
+    anciennete_rate = config.anciennete_12_20_rate
+elif total_months < 300:  # 20-25 ans
+    anciennete_rate = config.anciennete_20_25_rate
+else:  # 25+ ans
+    anciennete_rate = config.anciennete_25_plus_rate
+
+result = contract.wage * (anciennete_rate / 100)
+            </field>
+            <field name="sequence">5</field>
+            <field name="is_maroc_rule">True</field>
+            <field name="maroc_rule_type">prime_anciennete</field>
+        </record>
+        
+        <record id="hr_rule_maroc_sbi" model="hr.salary.rule">
+            <field name="name">Salaire Brut Imposable</field>
+            <field name="code">SBI</field>
+            <field name="category_id" ref="hr_payroll.GROSS"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = categories.BASIC + categories.ALW
+            </field>
+            <field name="sequence">10</field>
+            <field name="is_maroc_rule">True</field>
+            <field name="maroc_rule_type">salaire_brut_imposable</field>
+        </record>
+        
+        <record id="hr_rule_maroc_cnss" model="hr.salary.rule">
+            <field name="name">CNSS</field>
+            <field name="code">CNSS</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+config = env['hr.payroll.maroc'].search([], limit=1)
+cnss_base = min(categories.GROSS, config.cnss_ceiling)
+result = -cnss_base * (config.cnss_employee_rate / 100)
+            </field>
+            <field name="sequence">20</field>
+            <field name="is_maroc_rule">True</field>
+            <field name="maroc_rule_type">cnss</field>
+        </record>
+        
+        <record id="hr_rule_maroc_amo" model="hr.salary.rule">
+            <field name="name">AMO</field>
+            <field name="code">AMO</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+config = env['hr.payroll.maroc'].search([], limit=1)
+result = -categories.GROSS * (config.amo_employee_rate / 100)
+            </field>
+            <field name="sequence">30</field>
+            <field name="is_maroc_rule">True</field>
+            <field name="maroc_rule_type">amo</field>
+        </record>
+        
+        <record id="hr_rule_maroc_frais_prof" model="hr.salary.rule">
+            <field name="name">Frais Professionnels</field>
+            <field name="code">FRAIS_PROF</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+config = env['hr.payroll.maroc'].search([], limit=1)
+annual_sbi = categories.GROSS * 12
+fp_rate = config.fp_rate_below_78000 if annual_sbi <= 78000 else config.fp_rate_above_78000
+fp_max = config.fp_max_below_78000 if annual_sbi <= 78000 else config.fp_max_above_78000
+result = -min(categories.GROSS * (fp_rate / 100), config.fp_monthly_ceiling)
+            </field>
+            <field name="sequence">40</field>
+            <field name="is_maroc_rule">True</field>
+            <field name="maroc_rule_type">frais_prof</field>
+        </record>
+        
+        <record id="hr_rule_maroc_ir" model="hr.salary.rule">
+            <field name="name">IR</field>
+            <field name="code">IR</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+config = env['hr.payroll.maroc'].search([], limit=1)
+
+# Base before IR (net imposable)
+net_before_ir = categories.GROSS + categories.DED - payslip.line_ids.filtered(lambda l: l.code == 'IR').total
+
+# Apply family charges deduction
+children_deduction = min(employee.children, 6) * config.family_allowance_deduction
+net_after_children = net_before_ir - children_deduction
+
+# Apply IR barème
+ir_amount = 0
+
+if net_after_children <= config.ir_monthly_threshold_1:
+    ir_amount = (net_after_children * config.ir_monthly_rate_1 / 100) - config.ir_monthly_deduction_1
+elif net_after_children <= config.ir_monthly_threshold_2:
+    ir_amount = (net_after_children * config.ir_monthly_rate_2 / 100) - config.ir_monthly_deduction_2
+elif net_after_children <= config.ir_monthly_threshold_3:
+    ir_amount = (net_after_children * config.ir_monthly_rate_3 / 100) - config.ir_monthly_deduction_3
+elif net_after_children <= config.ir_monthly_threshold_4:
+    ir_amount = (net_after_children * config.ir_monthly_rate_4 / 100) - config.ir_monthly_deduction_4
+elif net_after_children <= config.ir_monthly_threshold_5:
+    ir_amount = (net_after_children * config.ir_monthly_rate_5 / 100) - config.ir_monthly_deduction_5
+else:
+    ir_amount = (net_after_children * config.ir_monthly_rate_6 / 100) - config.ir_monthly_deduction_6
+
+result = -max(ir_amount, 0)
+            </field>
+            <field name="sequence">50</field>
+            <field name="is_maroc_rule">True</field>
+            <field name="maroc_rule_type">ir</field>
+        </record>
+        
+        <record id="hr_rule_maroc_net" model="hr.salary.rule">
+            <field name="name">Net à Payer</field>
+            <field name="code">NET</field>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = categories.GROSS + categories.DED
+            </field>
+            <field name="sequence">100</field>
+            <field name="is_maroc_rule">True</field>
+            <field name="maroc_rule_type">net</field>
+        </record>
+        
+        <!-- Structure de paie Maroc -->
+        <record id="hr_payroll_structure_maroc" model="hr.payroll.structure">
+            <field name="name">Structure Paie Maroc</field>
+            <field name="code">MAROC</field>
+            <field name="rule_ids" eval="[
+                (4, ref('hr_rule_maroc_base')),
+                (4, ref('hr_rule_maroc_anciennete')),
+                (4, ref('hr_rule_maroc_sbi')),
+                (4, ref('hr_rule_maroc_cnss')),
+                (4, ref('hr_rule_maroc_amo')),
+                (4, ref('hr_rule_maroc_frais_prof')),
+                (4, ref('hr_rule_maroc_ir')),
+                (4, ref('hr_rule_maroc_net')),
+            ]"/>
+        </record>
+        
+        <!-- Jours fériés (2025) -->
+        <record id="hr_holiday_maroc_2025_new_year" model="hr.holidays.public.line">
+            <field name="name">Nouvelle année</field>
+            <field name="date">2025-01-01</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_independence" model="hr.holidays.public.line">
+            <field name="name">Manifeste de l'indépendance</field>
+            <field name="date">2025-01-11</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_amazigh" model="hr.holidays.public.line">
+            <field name="name">Nouvelle an Amazigh</field>
+            <field name="date">2025-01-14</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_labour" model="hr.holidays.public.line">
+            <field name="name">Fête du Travail</field>
+            <field name="date">2025-05-01</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_throne" model="hr.holidays.public.line">
+            <field name="name">Fête du Trône</field>
+            <field name="date">2025-07-30</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_oued_eddahab" model="hr.holidays.public.line">
+            <field name="name">Oued Eddahab</field>
+            <field name="date">2025-08-14</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_revolution" model="hr.holidays.public.line">
+            <field name="name">Révolution du Roi et du Peuple</field>
+            <field name="date">2025-08-20</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_youth" model="hr.holidays.public.line">
+            <field name="name">Fête de la Jeunesse</field>
+            <field name="date">2025-08-21</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_green_march" model="hr.holidays.public.line">
+            <field name="name">La Marche Verte</field>
+            <field name="date">2025-11-06</field>
+        </record>
+        
+        <record id="hr_holiday_maroc_2025_independence_day" model="hr.holidays.public.line">
+            <field name="name">Fête de l'indépendance</field>
+            <field name="date">2025-11-18</field>
+        </record>
+    </data>
+</odoo>

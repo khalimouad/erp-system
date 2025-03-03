@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Employee Form View Inheritance -->
+    <record id="view_employee_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Moroccan-specific fields to Personal Information page -->
+            <xpath expr="//page[@name='personal_information']" position="after">
+                <page string="Moroccan Payroll Information" name="moroccan_payroll_info">
+                    <group>
+                        <group string="Identification">
+                            <field name="matricule"/>
+                            <field name="cin"/>
+                            <field name="cnss_num"/>
+                            <field name="date_embauche"/>
+                            <field name="tax_id"/>
+                            <field name="tax_office"/>
+                        </group>
+                        <group string="Family Situation">
+                            <field name="ir_family_situation"/>
+                            <field name="children"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Social Security">
+                            <field name="cnss_affiliation_date"/>
+                            <field name="amo_affiliation_date"/>
+                        </group>
+                        <group string="Banking Information">
+                            <field name="bank_account_number"/>
+                            <field name="bank_name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Work Permit" attrs="{'invisible': [('country_id', '=', %(base.ma)d)]}">
+                            <field name="work_permit_number"/>
+                            <field name="work_permit_expiry_date"/>
+                        </group>
+                        <group string="Education and Classification">
+                            <field name="education_level"/>
+                            <field name="job_classification"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Employee Tree View Inheritance -->
+    <record id="view_employee_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.tree.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="matricule"/>
+                <field name="cnss_num"/>
+            </field>
+        </field>
+    </record>
+    
+    <!-- Employee Search View Inheritance -->
+    <record id="view_employee_filter_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.search.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="matricule"/>
+                <field name="cin"/>
+                <field name="cnss_num"/>
+            </field>
+            <filter name="group_job" position="after">
+                <filter name="group_family_situation" string="Family Situation" context="{'group_by': 'ir_family_situation'}"/>
+                <filter name="group_job_classification" string="Job Classification" context="{'group_by': 'job_classification'}"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

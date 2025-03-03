@@ -1,0 +1,95 @@
+/* PRISM Login Theme */
+
+/* Variables */
+$prism-primary: #3498db;
+$prism-secondary: #2c3e50;
+$prism-accent: #1abc9c;
+$prism-text: #333333;
+$prism-light: #ecf0f1;
+$prism-dark: #2c3e50;
+
+/* Login Background */
+.prism-login-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, $prism-secondary, $prism-primary);
+    z-index: -1;
+}
+
+/* Login Card */
+.prism-login-card {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    border: none !important;
+    overflow: hidden;
+    
+    .card-body {
+        padding: 30px !important;
+    }
+}
+
+/* Login Logo */
+.prism-login-logo {
+    max-height: 80px;
+    margin-bottom: 20px;
+}
+
+/* Form Elements */
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    height: auto;
+    
+    &:focus {
+        border-color: $prism-primary;
+        box-shadow: 0 0 0 0.2rem rgba($prism-primary, 0.25);
+    }
+}
+
+/* Login Button */
+.btn-primary {
+    background-color: $prism-primary !important;
+    border-color: $prism-primary !important;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    
+    &:hover, &:focus, &:active {
+        background-color: darken($prism-primary, 10%) !important;
+        border-color: darken($prism-primary, 10%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Footer */
+.o_login_footer {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    
+    a {
+        color: white !important;
+        text-decoration: underline;
+        
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+    .prism-login-card {
+        margin: 0 20px;
+    }
+    
+    .prism-login-logo {
+        max-height: 60px;
+    }
+}

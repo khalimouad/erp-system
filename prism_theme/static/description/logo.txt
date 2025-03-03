@@ -1,0 +1,2 @@
+This is a placeholder for the PRISM logo in the description.
+In a real implementation, this would be a PNG or SVG file.

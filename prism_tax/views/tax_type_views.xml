@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tax Type Form View -->
+    <record id="view_tax_type_form" model="ir.ui.view">
+        <field name="name">tax.type.form</field>
+        <field name="model">tax.type</field>
+        <field name="arch" type="xml">
+            <form string="Tax Type">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_rates" type="object" class="oe_stat_button" icon="fa-percent"
+                                attrs="{'invisible': [('rate_count', '=', 0)]}">
+                            <field name="rate_count" widget="statinfo" string="Rates"/>
+                        </button>
+                        <button name="action_view_exemptions" type="object" class="oe_stat_button" icon="fa-ban"
+                                attrs="{'invisible': [('exemption_count', '=', 0)]}">
+                            <field name="exemption_count" widget="statinfo" string="Exemptions"/>
+                        </button>
+                        <button name="action_view_declarations" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                                attrs="{'invisible': [('declaration_count', '=', 0)]}">
+                            <field name="declaration_count" widget="statinfo" string="Declarations"/>
+                        </button>
+                        <button name="action_view_reports" type="object" class="oe_stat_button" icon="fa-bar-chart"
+                                attrs="{'invisible': [('report_count', '=', 0)]}">
+                            <field name="report_count" widget="statinfo" string="Reports"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Value Added Tax"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="is_moroccan_tax"/>
+                            <field name="moroccan_tax_category" attrs="{'invisible': [('is_moroccan_tax', '=', False)], 'required': [('is_moroccan_tax', '=', True)]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Describe the tax type..."/>
+                        </page>
+                        <page string="Rates" attrs="{'invisible': [('rate_count', '=', 0)]}">
+                            <field name="rate_ids">
+                                <tree>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="amount_type"/>
+                                    <field name="rate"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Exemptions" attrs="{'invisible': [('exemption_count', '=', 0)]}">
+                            <field name="exemption_ids">
+                                <tree>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tax Type Tree View -->
+    <record id="view_tax_type_tree" model="ir.ui.view">
+        <field name="name">tax.type.tree</field>
+        <field name="model">tax.type</field>
+        <field name="arch" type="xml">
+            <tree string="Tax Types">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_moroccan_tax"/>
+                <field name="moroccan_tax_category"/>
+                <field name="rate_count"/>
+                <field name="exemption_count"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Tax Type Search View -->
+    <record id="view_tax_type_search" model="ir.ui.view">
+        <field name="name">tax.type.search</field>
+        <field name="model">tax.type</field>
+        <field name="arch" type="xml">
+            <search string="Search Tax Types">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="description"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <filter string="Moroccan Taxes" name="moroccan" domain="[('is_moroccan_tax', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Moroccan Category" name="group_by_moroccan_category" context="{'group_by': 'moroccan_tax_category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Tax Type Action -->
+    <record id="action_tax_type" model="ir.actions.act_window">
+        <field name="name">Tax Types</field>
+        <field name="res_model">tax.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_tax_type_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new tax type
+            </p>
+            <p>
+                Tax types define the categories of taxes that can be applied to transactions.
+            </p>
+        </field>
+    </record>
+</odoo>

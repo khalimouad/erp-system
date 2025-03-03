@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- VAT Taxes -->
+        <record id="vat_sale_20" model="account.tax">
+            <field name="name">VAT 20%</field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">20</field>
+            <field name="description">VAT 20%</field>
+            <field name="tax_group_id" ref="tax_group_vat_20"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">standard</field>
+        </record>
+        <record id="vat_purchase_20" model="account.tax">
+            <field name="name">VAT 20%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">20</field>
+            <field name="description">VAT 20%</field>
+            <field name="tax_group_id" ref="tax_group_vat_20"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">standard</field>
+        </record>
+        <record id="vat_sale_14" model="account.tax">
+            <field name="name">VAT 14%</field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">14</field>
+            <field name="description">VAT 14%</field>
+            <field name="tax_group_id" ref="tax_group_vat_14"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">reduced_14</field>
+        </record>
+        <record id="vat_purchase_14" model="account.tax">
+            <field name="name">VAT 14%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">14</field>
+            <field name="description">VAT 14%</field>
+            <field name="tax_group_id" ref="tax_group_vat_14"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">reduced_14</field>
+        </record>
+        <record id="vat_sale_10" model="account.tax">
+            <field name="name">VAT 10%</field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">10</field>
+            <field name="description">VAT 10%</field>
+            <field name="tax_group_id" ref="tax_group_vat_10"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">reduced_10</field>
+        </record>
+        <record id="vat_purchase_10" model="account.tax">
+            <field name="name">VAT 10%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">10</field>
+            <field name="description">VAT 10%</field>
+            <field name="tax_group_id" ref="tax_group_vat_10"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">reduced_10</field>
+        </record>
+        <record id="vat_sale_7" model="account.tax">
+            <field name="name">VAT 7%</field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">7</field>
+            <field name="description">VAT 7%</field>
+            <field name="tax_group_id" ref="tax_group_vat_7"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">reduced_7</field>
+        </record>
+        <record id="vat_purchase_7" model="account.tax">
+            <field name="name">VAT 7%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">7</field>
+            <field name="description">VAT 7%</field>
+            <field name="tax_group_id" ref="tax_group_vat_7"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">reduced_7</field>
+        </record>
+        <record id="vat_sale_0" model="account.tax">
+            <field name="name">VAT 0%</field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">0</field>
+            <field name="description">VAT 0%</field>
+            <field name="tax_group_id" ref="tax_group_vat_0"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">exempt</field>
+        </record>
+        <record id="vat_purchase_0" model="account.tax">
+            <field name="name">VAT 0%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">0</field>
+            <field name="description">VAT 0%</field>
+            <field name="tax_group_id" ref="tax_group_vat_0"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">vat</field>
+            <field name="vat_tax_type">exempt</field>
+        </record>
+
+        <!-- IS (Corporate Tax) Taxes -->
+        <record id="is_31" model="account.tax">
+            <field name="name">IS 31%</field>
+            <field name="type_tax_use">none</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">31</field>
+            <field name="description">IS 31%</field>
+            <field name="tax_group_id" ref="tax_group_is_31"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">is</field>
+            <field name="is_tax_type">standard</field>
+        </record>
+        <record id="is_20" model="account.tax">
+            <field name="name">IS 20%</field>
+            <field name="type_tax_use">none</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">20</field>
+            <field name="description">IS 20%</field>
+            <field name="tax_group_id" ref="tax_group_is_20"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">is</field>
+            <field name="is_tax_type">reduced_20</field>
+        </record>
+        <record id="is_15" model="account.tax">
+            <field name="name">IS 15%</field>
+            <field name="type_tax_use">none</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">15</field>
+            <field name="description">IS 15%</field>
+            <field name="tax_group_id" ref="tax_group_is_15"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">is</field>
+            <field name="is_tax_type">reduced_15</field>
+        </record>
+        <record id="is_10" model="account.tax">
+            <field name="name">IS 10%</field>
+            <field name="type_tax_use">none</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">10</field>
+            <field name="description">IS 10%</field>
+            <field name="tax_group_id" ref="tax_group_is_10"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">is</field>
+            <field name="is_tax_type">reduced_10</field>
+        </record>
+
+        <!-- IR (Income Tax) Taxes -->
+        <record id="ir_salary_38" model="account.tax">
+            <field name="name">IR Salary 38%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">38</field>
+            <field name="description">IR Salary 38%</field>
+            <field name="tax_group_id" ref="tax_group_ir"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">ir</field>
+            <field name="ir_tax_type">salary</field>
+        </record>
+        <record id="ir_professional_30" model="account.tax">
+            <field name="name">IR Professional 30%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">30</field>
+            <field name="description">IR Professional 30%</field>
+            <field name="tax_group_id" ref="tax_group_ir"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">ir</field>
+            <field name="ir_tax_type">professional</field>
+        </record>
+        <record id="ir_property_15" model="account.tax">
+            <field name="name">IR Property 15%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">15</field>
+            <field name="description">IR Property 15%</field>
+            <field name="tax_group_id" ref="tax_group_ir"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">ir</field>
+            <field name="ir_tax_type">property</field>
+        </record>
+        <record id="ir_capital_20" model="account.tax">
+            <field name="name">IR Capital 20%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">20</field>
+            <field name="description">IR Capital 20%</field>
+            <field name="tax_group_id" ref="tax_group_ir"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">ir</field>
+            <field name="ir_tax_type">capital</field>
+        </record>
+        <record id="ir_agricultural_10" model="account.tax">
+            <field name="name">IR Agricultural 10%</field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">10</field>
+            <field name="description">IR Agricultural 10%</field>
+            <field name="tax_group_id" ref="tax_group_ir"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">ir</field>
+            <field name="ir_tax_type">agricultural</field>
+        </record>
+
+        <!-- Stamp Duty Taxes -->
+        <record id="stamp_duty_1" model="account.tax">
+            <field name="name">Stamp Duty 1%</field>
+            <field name="type_tax_use">none</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">1</field>
+            <field name="description">Stamp Duty 1%</field>
+            <field name="tax_group_id" ref="tax_group_stamp"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">stamp</field>
+        </record>
+
+        <!-- Registration Duty Taxes -->
+        <record id="registration_duty_5" model="account.tax">
+            <field name="name">Registration Duty 5%</field>
+            <field name="type_tax_use">none</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">5</field>
+            <field name="description">Registration Duty 5%</field>
+            <field name="tax_group_id" ref="tax_group_registration"/>
+            <field name="is_moroccan_tax">True</field>
+            <field name="moroccan_tax_type">registration</field>
+        </record>
+    </data>
+</odoo>

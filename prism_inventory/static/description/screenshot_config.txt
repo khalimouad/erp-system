@@ -1,0 +1,2 @@
+This is a placeholder for the configuration panel screenshot.
+In a real implementation, this would be a PNG or JPG file showing the PRISM Inventory configuration panel with Moroccan-specific settings for warehouse types, location types, customs management, and approval workflows.

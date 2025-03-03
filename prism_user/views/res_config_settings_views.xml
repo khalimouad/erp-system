@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_prism_user" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.prism.user</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="User Management" string="User Management" data-key="prism_user">
+                    <h2>User Management</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_user"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_user"/>
+                                <div class="text-muted">
+                                    Enable user management with roles and approval workflows
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2>Security Settings</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="user_require_password_complexity"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="user_require_password_complexity"/>
+                                <div class="text-muted">
+                                    Require complex passwords with minimum length, special characters, etc.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"></div>
+                            <div class="o_setting_right_pane">
+                                <label for="user_password_expiry_days"/>
+                                <field name="user_password_expiry_days"/>
+                                <div class="text-muted">
+                                    Number of days after which passwords expire (0 for no expiry)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"></div>
+                            <div class="o_setting_right_pane">
+                                <label for="user_max_login_attempts"/>
+                                <field name="user_max_login_attempts"/>
+                                <div class="text-muted">
+                                    Maximum number of failed login attempts before account is locked (0 for no limit)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"></div>
+                            <div class="o_setting_right_pane">
+                                <label for="user_session_timeout_minutes"/>
+                                <field name="user_session_timeout_minutes"/>
+                                <div class="text-muted">
+                                    Number of minutes of inactivity before a user session expires (0 for no timeout)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2>Approval Settings</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="user_role_approval_required"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="user_role_approval_required"/>
+                                <div class="text-muted">
+                                    Require approval for all role assignments
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="user_role_approval_admin_only" attrs="{'invisible': [('user_role_approval_required', '=', False)]}"/>
+                            </div>
+                            <div class="o_setting_right_pane" attrs="{'invisible': [('user_role_approval_required', '=', False)]}">
+                                <label for="user_role_approval_admin_only"/>
+                                <div class="text-muted">
+                                    Only administrators can approve role assignments
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2>Moroccan-Specific Settings</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="user_require_cin"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="user_require_cin"/>
+                                <div class="text-muted">
+                                    Require Moroccan National Identity Card Number (CIN) for all users
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="user_validate_cin" attrs="{'invisible': [('user_require_cin', '=', False)]}"/>
+                            </div>
+                            <div class="o_setting_right_pane" attrs="{'invisible': [('user_require_cin', '=', False)]}">
+                                <label for="user_validate_cin"/>
+                                <div class="text-muted">
+                                    Validate the format of Moroccan CIN numbers
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2>Audit Settings</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="user_activity_logging"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="user_activity_logging"/>
+                                <div class="text-muted">
+                                    Log all user activities for audit purposes
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="user_login_logging"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="user_login_logging"/>
+                                <div class="text-muted">
+                                    Log all login attempts, successful or failed
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
