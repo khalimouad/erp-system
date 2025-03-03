@@ -1,2 +1,0 @@
-This is a placeholder for the import purchase screenshot.
-In a real implementation, this would be a PNG or JPG file.

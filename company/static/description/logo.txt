@@ -1,2 +1,0 @@
-This is a placeholder for the PRISM Company module logo.
-In a real implementation, this would be a PNG or SVG file.

@@ -1,2 +1,0 @@
-This is a placeholder for the PRISM favicon.
-In a real implementation, this would be an ICO file.

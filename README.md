@@ -32,6 +32,7 @@ PRISM ERP is a comprehensive Enterprise Resource Planning system designed specif
 ### Financial Modules
 
 - **PRISM Accounting**: Accounting system with Moroccan chart of accounts
+- **PRISM Accounting MA EDI**: Electronic filing of tax declarations for Morocco (DGI)
 - **PRISM Tax**: Tax management with Moroccan tax rules
 - **PRISM Payroll**: Payroll management with Moroccan labor laws
 
@@ -41,19 +42,20 @@ The project follows a modular structure, with each module having its own directo
 
 ```
 erp-system/
-├── prism_core/            # Core functionality and system-wide settings
-├── prism_theme/           # PRISM theme
-├── prism_company/         # Company management
-├── prism_partner/         # Partner management
-├── prism_product/         # Product management
-├── prism_inventory/       # Inventory management
-├── prism_sales/           # Sales management
-├── prism_purchase/        # Purchase management
-├── prism_accounting/      # Accounting management
-├── prism_tax/             # Tax management
-├── prism_payroll/         # Payroll management
-├── prism_user/            # User management
-└── README.md              # This file
+├── prism_core/                # Core functionality and system-wide settings
+├── prism_theme/               # PRISM theme
+├── prism_company/             # Company management
+├── prism_partner/             # Partner management
+├── prism_product/             # Product management
+├── prism_inventory/           # Inventory management
+├── prism_sales/               # Sales management
+├── prism_purchase/            # Purchase management
+├── prism_accounting/          # Accounting management
+├── prism_accounting_ma_edi/   # Moroccan EDI integration for accounting
+├── prism_tax/                 # Tax management
+├── prism_payroll/             # Payroll management
+├── prism_user/                # User management
+└── README.md                  # This file
 ```
 
 Each module follows a standard Odoo module structure:

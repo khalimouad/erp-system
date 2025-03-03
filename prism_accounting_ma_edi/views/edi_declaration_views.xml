@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Common menu for all EDI declarations -->
+    <menuitem id="menu_dgi_edi_root" name="DGI EDI Declarations" parent="accounting.menu_finance" sequence="10"/>
+    
+    <!-- Reference Data Views -->
+    <!-- DGI Commune -->
+    <record id="view_dgi_commune_tree" model="ir.ui.view">
+        <field name="name">dgi.commune.tree</field>
+        <field name="model">dgi.commune</field>
+        <field name="arch" type="xml">
+            <tree string="Communes">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_dgi_commune_form" model="ir.ui.view">
+        <field name="name">dgi.commune.form</field>
+        <field name="model">dgi.commune</field>
+        <field name="arch" type="xml">
+            <form string="Commune">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_dgi_commune" model="ir.actions.act_window">
+        <field name="name">Communes</field>
+        <field name="res_model">dgi.commune</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <!-- DGI Nature -->
+    <record id="view_dgi_nature_tree" model="ir.ui.view">
+        <field name="name">dgi.nature.tree</field>
+        <field name="model">dgi.nature</field>
+        <field name="arch" type="xml">
+            <tree string="Natures">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="declaration_type"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_dgi_nature_form" model="ir.ui.view">
+        <field name="name">dgi.nature.form</field>
+        <field name="model">dgi.nature</field>
+        <field name="arch" type="xml">
+            <form string="Nature">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="declaration_type"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_dgi_nature" model="ir.actions.act_window">
+        <field name="name">Natures</field>
+        <field name="res_model">dgi.nature</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <!-- DGI Taux -->
+    <record id="view_dgi_taux_tree" model="ir.ui.view">
+        <field name="name">dgi.taux.tree</field>
+        <field name="model">dgi.taux</field>
+        <field name="arch" type="xml">
+            <tree string="Taux">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="rate"/>
+                <field name="declaration_type"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_dgi_taux_form" model="ir.ui.view">
+        <field name="name">dgi.taux.form</field>
+        <field name="model">dgi.taux</field>
+        <field name="arch" type="xml">
+            <form string="Taux">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="rate"/>
+                        <field name="declaration_type"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_dgi_taux" model="ir.actions.act_window">
+        <field name="name">Taux</field>
+        <field name="res_model">dgi.taux</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <!-- Configuration Menu -->
+    <menuitem id="menu_dgi_edi_config" name="Configuration" parent="menu_dgi_edi_root" sequence="100"/>
+    <menuitem id="menu_dgi_commune" name="Communes" parent="menu_dgi_edi_config" action="action_dgi_commune" sequence="10"/>
+    <menuitem id="menu_dgi_nature" name="Natures" parent="menu_dgi_edi_config" action="action_dgi_nature" sequence="20"/>
+    <menuitem id="menu_dgi_taux" name="Taux" parent="menu_dgi_edi_config" action="action_dgi_taux" sequence="30"/>
+</odoo>

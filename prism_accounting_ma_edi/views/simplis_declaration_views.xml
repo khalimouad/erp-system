@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- SIMPL-IS Declaration Views -->
+    <record id="view_simplis_declaration_tree" model="ir.ui.view">
+        <field name="name">simplis.declaration.tree</field>
+        <field name="model">simplis.declaration</field>
+        <field name="arch" type="xml">
+            <tree string="SIMPL-IS Declarations" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='sent'">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="declaration_subtype"/>
+                <field name="year"/>
+                <field name="period"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_simplis_declaration_form" model="ir.ui.view">
+        <field name="name">simplis.declaration.form</field>
+        <field name="model">simplis.declaration</field>
+        <field name="arch" type="xml">
+            <form string="SIMPL-IS Declaration">
+                <header>
+                    <button name="action_generate_xml" string="Generate XML" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_send_to_dgi" string="Send to DGI" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'generated')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,sent,accepted"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                            <field name="declaration_subtype"/>
+                            <field name="model_id" attrs="{'invisible': [('declaration_subtype', '!=', 'liasse')], 'required': [('declaration_subtype', '=', 'liasse')]}"/>
+                            <field name="year"/>
+                            <field name="period"/>
+                        </group>
+                        <group>
+                            <field name="exercice_fiscal_du"/>
+                            <field name="exercice_fiscal_au"/>
+                            <field name="date_start" invisible="1"/>
+                            <field name="date_end" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Declaration Lines" attrs="{'invisible': [('declaration_subtype', '=', 'liasse')]}">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="partner_id"/>
+                                    <field name="name"/>
+                                    
+                                    <!-- Common fields -->
+                                    <field name="montant_retenue"/>
+                                    
+                                    <!-- Fields for DRVT -->
+                                    <field name="honoraires_ras" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'drvt')], 'required': [('parent.declaration_subtype', '=', 'drvt')]}"/>
+                                    <field name="commissions_ras" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'drvt')]}"/>
+                                    <field name="remunerations_ras" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'drvt')]}"/>
+                                    <field name="rabais_ras" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'drvt')]}"/>
+                                    <field name="jeton_presence_ras" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'drvt')]}"/>
+                                    
+                                    <!-- Fields for PAPSRA -->
+                                    <field name="montant_distribution" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'papsra')], 'required': [('parent.declaration_subtype', '=', 'papsra')]}"/>
+                                    
+                                    <!-- Fields for PPRF -->
+                                    <field name="montant_global" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'pprf')], 'required': [('parent.declaration_subtype', '=', 'pprf')]}"/>
+                                    <field name="montant_remun" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'pprf')]}"/>
+                                    <field name="montant_principal" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'pprf')]}"/>
+                                    
+                                    <!-- Fields for CA -->
+                                    <field name="montant_ca" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'ca')], 'required': [('parent.declaration_subtype', '=', 'ca')]}"/>
+                                    <field name="montant_tva" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'ca')]}"/>
+                                    
+                                    <!-- Fields for RVT_MED -->
+                                    <field name="montant_honoraires" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'rvt_med')], 'required': [('parent.declaration_subtype', '=', 'rvt_med')]}"/>
+                                    
+                                    <!-- Fields for RAS -->
+                                    <field name="montant_brut" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'ras')], 'required': [('parent.declaration_subtype', '=', 'ras')]}"/>
+                                    
+                                    <!-- Fields for PROFIT -->
+                                    <field name="montant_cession" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'profit')], 'required': [('parent.declaration_subtype', '=', 'profit')]}"/>
+                                    <field name="prix_acquisition" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'profit')]}"/>
+                                    <field name="frais_acquisition" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'profit')]}"/>
+                                    <field name="frais_cession" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'profit')]}"/>
+                                    <field name="profit_net" attrs="{'invisible': [('parent.declaration_subtype', '!=', 'profit')]}"/>
+                                    
+                                    <!-- Reference fields -->
+                                    <field name="nature_id" attrs="{'invisible': [('parent.declaration_subtype', 'not in', ['papsra', 'pprf', 'ca', 'ras', 'profit'])]}"/>
+                                    <field name="taux_id" attrs="{'invisible': [('parent.declaration_subtype', 'not in', ['drvt', 'papsra', 'pprf', 'rvt_med', 'ras', 'profit'])]}"/>
+                                    
+                                    <field name="company_currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Field Mappings" attrs="{'invisible': [('declaration_subtype', '!=', 'liasse')]}">
+                            <field name="field_mapping_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="parent_mapping_id" domain="[('is_table', '=', True), ('declaration_id', '=', parent.id)]"/>
+                                    <field name="xml_element"/>
+                                    <field name="odoo_field"/>
+                                    <field name="is_computed"/>
+                                    <field name="is_table"/>
+                                    <field name="table_model" attrs="{'invisible': [('is_table', '=', False)], 'required': [('is_table', '=', True)]}"/>
+                                    <field name="table_domain" attrs="{'invisible': [('is_table', '=', False)]}"/>
+                                    <field name="code_edi" attrs="{'invisible': [('is_table', '=', False)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Generated Files" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <group>
+                                <field name="xml_file" filename="xml_filename" widget="binary" attrs="{'invisible': [('xml_file', '=', False)]}"/>
+                                <field name="xml_filename" invisible="1"/>
+                                <field name="zip_file" filename="zip_filename" widget="binary" attrs="{'invisible': [('zip_file', '=', False)]}"/>
+                                <field name="zip_filename" invisible="1"/>
+                            </group>
+                        </page>
+                        <page string="DGI Response" attrs="{'invisible': [('response_message', '=', False)]}">
+                            <field name="response_message"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="view_simplis_declaration_search" model="ir.ui.view">
+        <field name="name">simplis.declaration.search</field>
+        <field name="model">simplis.declaration</field>
+        <field name="arch" type="xml">
+            <search string="Search SIMPL-IS Declarations">
+                <field name="name"/>
+                <field name="year"/>
+                <field name="declaration_subtype"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Generated" name="generated" domain="[('state', '=', 'generated')]"/>
+                <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
+                <filter string="Accepted" name="accepted" domain="[('state', '=', 'accepted')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
+                    <filter string="Declaration Type" name="groupby_type" context="{'group_by': 'declaration_subtype'}"/>
+                    <filter string="Fiscal Year" name="groupby_year" context="{'group_by': 'year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Generate XML Wizard Form -->
+    <record id="view_simplis_generate_xml_wizard_form" model="ir.ui.view">
+        <field name="name">simplis.generate.xml.wizard.form</field>
+        <field name="model">simplis.generate.xml.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate SIMPL-IS Declaration">
+                <group>
+                    <field name="declaration_subtype"/>
+                    <field name="model_id" attrs="{'invisible': [('declaration_subtype', '!=', 'liasse')], 'required': [('declaration_subtype', '=', 'liasse')]}"/>
+                    <field name="fiscal_year"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+                <footer>
+                    <button name="action_generate" string="Generate" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Generate XML Wizard Action -->
+    <record id="action_simplis_generate_xml_wizard" model="ir.actions.act_window">
+        <field name="name">Generate SIMPL-IS Declaration</field>
+        <field name="res_model">simplis.generate.xml.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+    <!-- Action for SIMPL-IS Declarations -->
+    <record id="action_simplis_declaration" model="ir.actions.act_window">
+        <field name="name">SIMPL-IS Declarations</field>
+        <field name="res_model">simplis.declaration</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_simplis_declaration_tree"/>
+        <field name="search_view_id" ref="view_simplis_declaration_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new SIMPL-IS declaration
+            </p>
+        </field>
+    </record>
+    
+    <!-- Menu for SIMPL-IS Declaration -->
+    <menuitem id="menu_simplis_root" name="SIMPL-IS" parent="menu_dgi_edi_root" sequence="30"/>
+    <menuitem id="menu_simplis_declaration" name="Declarations" parent="menu_simplis_root" action="action_simplis_declaration" sequence="10"/>
+    <menuitem id="menu_simplis_generate" name="Generate Declaration" parent="menu_simplis_root" action="action_simplis_generate_xml_wizard" sequence="20"/>
+</odoo>
