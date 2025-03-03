@@ -3,6 +3,54 @@ from odoo import api, fields, models, _
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
     
+    @api.model
+    def get_values(self):
+        res = super(ResConfigSettings, self).get_values()
+        params = self.env['ir.config_parameter'].sudo()
+        
+        # Get values from system parameters
+        res.update(
+            enable_customs_management=params.get_param('prism_inventory.enable_customs_management', 'False') == 'True',
+            default_customs_authority=params.get_param('prism_inventory.default_customs_authority', ''),
+            enable_vat_exemption=params.get_param('prism_inventory.enable_vat_exemption', 'False') == 'True',
+            vat_exemption_document=params.get_param('prism_inventory.vat_exemption_document', ''),
+            enable_temperature_control=params.get_param('prism_inventory.enable_temperature_control', 'False') == 'True',
+            default_temperature_min=float(params.get_param('prism_inventory.default_temperature_min', '2.0')),
+            default_temperature_max=float(params.get_param('prism_inventory.default_temperature_max', '8.0')),
+            enable_approval_workflow=params.get_param('prism_inventory.enable_approval_workflow', 'False') == 'True',
+            require_manager_approval=params.get_param('prism_inventory.require_manager_approval', 'False') == 'True',
+            enable_quality_control=params.get_param('prism_inventory.enable_quality_control', 'False') == 'True',
+            default_quality_check_frequency=params.get_param('prism_inventory.default_quality_check_frequency', 'monthly'),
+            enable_lot_tracking=params.get_param('prism_inventory.enable_lot_tracking', 'False') == 'True',
+            require_lot_origin=params.get_param('prism_inventory.require_lot_origin', 'False') == 'True',
+            require_lot_expiry=params.get_param('prism_inventory.require_lot_expiry', 'False') == 'True',
+            enable_enhanced_reporting=params.get_param('prism_inventory.enable_enhanced_reporting', 'False') == 'True',
+            default_report_currency=params.get_param('prism_inventory.default_report_currency', 'both'),
+        )
+        return res
+    
+    def set_values(self):
+        super(ResConfigSettings, self).set_values()
+        params = self.env['ir.config_parameter'].sudo()
+        
+        # Set values in system parameters
+        params.set_param('prism_inventory.enable_customs_management', str(self.enable_customs_management))
+        params.set_param('prism_inventory.default_customs_authority', self.default_customs_authority or '')
+        params.set_param('prism_inventory.enable_vat_exemption', str(self.enable_vat_exemption))
+        params.set_param('prism_inventory.vat_exemption_document', self.vat_exemption_document or '')
+        params.set_param('prism_inventory.enable_temperature_control', str(self.enable_temperature_control))
+        params.set_param('prism_inventory.default_temperature_min', str(self.default_temperature_min))
+        params.set_param('prism_inventory.default_temperature_max', str(self.default_temperature_max))
+        params.set_param('prism_inventory.enable_approval_workflow', str(self.enable_approval_workflow))
+        params.set_param('prism_inventory.require_manager_approval', str(self.require_manager_approval))
+        params.set_param('prism_inventory.enable_quality_control', str(self.enable_quality_control))
+        params.set_param('prism_inventory.default_quality_check_frequency', self.default_quality_check_frequency)
+        params.set_param('prism_inventory.enable_lot_tracking', str(self.enable_lot_tracking))
+        params.set_param('prism_inventory.require_lot_origin', str(self.require_lot_origin))
+        params.set_param('prism_inventory.require_lot_expiry', str(self.require_lot_expiry))
+        params.set_param('prism_inventory.enable_enhanced_reporting', str(self.enable_enhanced_reporting))
+        params.set_param('prism_inventory.default_report_currency', self.default_report_currency)
+    
     # Moroccan-specific inventory settings
     module_prism_inventory = fields.Boolean(string='PRISM Inventory')
     

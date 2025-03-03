@@ -21,7 +21,7 @@ class AccountMove(models.Model):
         ('cancel', 'Cancelled')
     ], string='Status', required=True, readonly=True, copy=False, tracking=True, default='draft')
     
-    type = fields.Selection([
+    move_type = fields.Selection([
         ('entry', 'Journal Entry'),
         ('out_invoice', 'Customer Invoice'),
         ('out_refund', 'Customer Credit Note'),
@@ -75,12 +75,12 @@ class AccountMove(models.Model):
     invoice_date_due = fields.Date(string='Due Date', readonly=True, states={'draft': [('readonly', False)]},
                                  index=True, copy=False)
     
-    # Payment
+    # Payment (deprecated field kept for compatibility)
     invoice_payment_state = fields.Selection([
         ('not_paid', 'Not Paid'),
         ('in_payment', 'In Payment'),
         ('paid', 'Paid'),
-    ], string='Payment Status', compute='_compute_invoice_payment_state', store=True, readonly=True, copy=False, default='not_paid')
+    ], string='Payment Status (Deprecated)', compute='_compute_invoice_payment_state', store=True, readonly=True, copy=False, default='not_paid')
     
     payment_id = fields.Many2one('account.payment', string='Payment', copy=False)
     statement_line_id = fields.Many2one('account.bank.statement.line', string='Statement Line', copy=False)
@@ -236,26 +236,22 @@ class AccountMove(models.Model):
             move.amount_residual = move.amount_total
             
             # Signed amounts
-            sign = -1 if move.type in ['out_refund', 'in_refund'] else 1
+            sign = -1 if move.move_type in ['out_refund', 'in_refund'] else 1
             move.amount_untaxed_signed = sign * move.amount_untaxed
             move.amount_tax_signed = sign * move.amount_tax
             move.amount_total_signed = sign * move.amount_total
             move.amount_residual_signed = sign * move.amount_residual
     
-    @api.depends('payment_state', 'line_ids.amount_residual')
+    @api.depends('payment_state')
     def _compute_invoice_payment_state(self):
         for move in self:
-            if move.payment_state == 'invoicing_legacy':
-                # Legacy mode
-                move.invoice_payment_state = 'paid' if move.payment_state == 'paid' else 'not_paid'
+            # Map payment_state to invoice_payment_state for backward compatibility
+            if move.payment_state == 'paid':
+                move.invoice_payment_state = 'paid'
+            elif move.payment_state in ['partial', 'in_payment']:
+                move.invoice_payment_state = 'in_payment'
             else:
-                # Standard mode
-                if move.payment_state == 'paid':
-                    move.invoice_payment_state = 'paid'
-                elif move.payment_state == 'partial':
-                    move.invoice_payment_state = 'in_payment'
-                else:
-                    move.invoice_payment_state = 'not_paid'
+                move.invoice_payment_state = 'not_paid'
     
     @api.depends('line_ids.account_id', 'line_ids.account_id.is_inventory_account')
     def _compute_affects_inventory_valuation(self):
@@ -279,7 +275,7 @@ class AccountMove(models.Model):
     @api.depends('line_ids.matched_debit_ids', 'line_ids.matched_credit_ids', 'line_ids.account_id')
     def _compute_payment_state(self):
         for move in self:
-            if move.type == 'entry' or move.is_outbound():
+            if move.move_type == 'entry' or move.is_outbound():
                 move.payment_state = 'not_paid'
                 continue
             
@@ -307,9 +303,9 @@ class AccountMove(models.Model):
             self.currency_id = self.journal_id.currency_id or self.company_id.currency_id
             
             # Set default accounts based on journal type
-            if self.type in ['out_invoice', 'out_refund', 'out_receipt']:
+            if self.move_type in ['out_invoice', 'out_refund', 'out_receipt']:
                 self.fiscal_position_id = self.partner_id.property_account_position_id
-            elif self.type in ['in_invoice', 'in_refund', 'in_receipt']:
+            elif self.move_type in ['in_invoice', 'in_refund', 'in_receipt']:
                 self.fiscal_position_id = self.partner_id.property_account_position_id
     
     @api.onchange('partner_id')
@@ -318,9 +314,9 @@ class AccountMove(models.Model):
             self.fiscal_position_id = self.partner_id.property_account_position_id
             
             # Set payment terms based on partner
-            if self.type in ['out_invoice', 'out_refund', 'out_receipt']:
+            if self.move_type in ['out_invoice', 'out_refund', 'out_receipt']:
                 self.invoice_payment_term_id = self.partner_id.property_payment_term_id
-            elif self.type in ['in_invoice', 'in_refund', 'in_receipt']:
+            elif self.move_type in ['in_invoice', 'in_refund', 'in_receipt']:
                 self.invoice_payment_term_id = self.partner_id.property_supplier_payment_term_id
     
     @api.onchange('invoice_payment_term_id', 'invoice_date')
@@ -345,7 +341,7 @@ class AccountMove(models.Model):
             if not move.name or move.name == '/':
                 # Get sequence
                 sequence = move.journal_id.sequence_id
-                if move.type in ['out_refund', 'in_refund'] and move.journal_id.refund_sequence:
+                if move.move_type in ['out_refund', 'in_refund'] and move.journal_id.refund_sequence:
                     sequence = move.journal_id.refund_sequence_id
                 
                 if not sequence:
@@ -363,12 +359,12 @@ class AccountMove(models.Model):
             move.posted_date = fields.Datetime.now()
             
             # Update invoice validation date
-            if move.type in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt']:
+            if move.move_type in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt']:
                 move.invoice_validate_date = fields.Date.today()
                 move.invoice_validated_by = self.env.user.id
             
             # Create activity for sales team if configured
-            if move.type in ['out_invoice', 'out_refund'] and move.journal_id.sale_activity_type_id:
+            if move.move_type in ['out_invoice', 'out_refund'] and move.journal_id.sale_activity_type_id:
                 activity_type = move.journal_id.sale_activity_type_id
                 user = move.journal_id.sale_activity_user_id or self.env.user
                 
@@ -394,7 +390,7 @@ class AccountMove(models.Model):
             move.cancelled_date = fields.Datetime.now()
             
             # Update invoice cancellation date
-            if move.type in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt']:
+            if move.move_type in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt']:
                 move.invoice_cancel_date = fields.Date.today()
                 move.invoice_cancelled_by = self.env.user.id
         
@@ -490,27 +486,27 @@ class AccountMove(models.Model):
     def is_outbound(self):
         """Check if the move is an outbound payment"""
         self.ensure_one()
-        return self.type in ['out_invoice', 'out_refund', 'out_receipt']
+        return self.move_type in ['out_invoice', 'out_refund', 'out_receipt']
     
     def is_inbound(self):
         """Check if the move is an inbound payment"""
         self.ensure_one()
-        return self.type in ['in_invoice', 'in_refund', 'in_receipt']
+        return self.move_type in ['in_invoice', 'in_refund', 'in_receipt']
     
     def is_invoice(self):
         """Check if the move is an invoice"""
         self.ensure_one()
-        return self.type in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund']
+        return self.move_type in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund']
     
     def is_sale(self):
         """Check if the move is a sale"""
         self.ensure_one()
-        return self.type in ['out_invoice', 'out_refund', 'out_receipt']
+        return self.move_type in ['out_invoice', 'out_refund', 'out_receipt']
     
     def is_purchase(self):
         """Check if the move is a purchase"""
         self.ensure_one()
-        return self.type in ['in_invoice', 'in_refund', 'in_receipt']
+        return self.move_type in ['in_invoice', 'in_refund', 'in_receipt']
     
     def action_register_payment(self):
         """Register payment for the journal entry"""
@@ -559,7 +555,7 @@ class AccountMove(models.Model):
         """Send invoice by email"""
         self.ensure_one()
         
-        if self.type not in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund']:
+        if self.move_type not in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund']:
             raise UserError(_("You can only send invoices by email."))
         
         template = self.env.ref('accounting.email_template_invoice', False)
@@ -589,7 +585,7 @@ class AccountMove(models.Model):
         """Print invoice"""
         self.ensure_one()
         
-        if self.type not in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund']:
+        if self.move_type not in ['out_invoice', 'out_refund', 'in_invoice', 'in_refund']:
             raise UserError(_("You can only print invoices."))
         
         return self.env.ref('accounting.action_report_invoice').report_action(self)

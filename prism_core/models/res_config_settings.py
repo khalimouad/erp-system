@@ -3,6 +3,16 @@ from odoo import api, fields, models
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
     
+    @api.model
+    def get_values(self):
+        res = super(ResConfigSettings, self).get_values()
+        # No need to add custom logic here since all fields are related fields
+        return res
+    
+    def set_values(self):
+        super(ResConfigSettings, self).set_values()
+        # No need to add custom logic here since all fields are related fields
+    
     # Company Information
     company_name = fields.Char(related='company_id.name', readonly=False)
     company_tax_id = fields.Char(related='company_id.vat', string="ICE Number", readonly=False)
