@@ -21,14 +21,14 @@
                             <field name="is_sme"/>
                             <field name="is_exporter"/>
                             <field name="is_in_free_zone"/>
-                            <field name="free_zone_name" attrs="{'invisible': [('is_in_free_zone', '=', False)], 'required': [('is_in_free_zone', '=', True)]}"/>
+                            <field name="free_zone_name" invisible="not is_in_free_zone" required="is_in_free_zone"/>
                         </group>
                     </group>
                     <group>
                         <group string="Tax Information">
                             <field name="has_tax_exemption"/>
-                            <field name="tax_exemption_type" attrs="{'invisible': [('has_tax_exemption', '=', False)], 'required': [('has_tax_exemption', '=', True)]}"/>
-                            <field name="tax_exemption_expiry" attrs="{'invisible': [('has_tax_exemption', '=', False)]}"/>
+                            <field name="tax_exemption_type" invisible="not has_tax_exemption" required="has_tax_exemption"/>
+                            <field name="tax_exemption_expiry" invisible="not has_tax_exemption"/>
                             <field name="vat_filing_frequency"/>
                         </group>
                         <group string="Accounting Settings">
