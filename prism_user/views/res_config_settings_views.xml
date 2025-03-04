@@ -5,7 +5,7 @@
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('o_settings_container')]" position="inside">
+            <xpath expr="//div[@data-key='prism_core']//div[hasclass('o_settings_container')]" position="inside">
                 <div class="app_settings_block" data-string="User Management" string="User Management" data-key="prism_user">
                     <h2>User Management</h2>
                     <div class="row mt16 o_settings_container">
